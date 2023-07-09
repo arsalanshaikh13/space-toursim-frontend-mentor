@@ -1,0 +1,62 @@
+/* ================= 
+    Resets
+===================*/
+
+/* https://andy-bell.co.uk/a-modern-css-reset/ - Andy Bell's Reset(inspiration for reset) */
+/* box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* margin reset */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture,
+ul {
+  margin: 0;
+}
+
+/* set up the body */
+body {
+  line-height: 1.5; /*browser default is 1.4/1.5*/
+  min-height: 100vh; /*all the pages are bigger in size and avoid smaller pages on the display and never allow website size to go smaller*/
+}
+
+/* make images easier to work with */
+img,
+picture {
+  /* shrink images as per screen size but never allow images to grow beyond its original size */
+  max-width: 100%;
+  /* remove the space below image which appears since images are inline by default */
+  display: block;
+}
+/* make form elements easier to work with */
+input,
+button,
+select,
+textarea {
+  /* form elements don't inherit font by default */
+  font: inherit;
+}
+
+/* Remove all animations, transitions  for people that prefer not to see them 
+this is important for accessibility reasons because for some people animations make them feel sick and 
+they turn off animation in their browser/OS so remove animation from your site for those people who have chosen
+to turn off animation in their website*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
