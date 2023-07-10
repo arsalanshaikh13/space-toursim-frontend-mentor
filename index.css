@@ -111,6 +111,7 @@ to turn off animation in their website*/
 /* ================= 
     Utility Classes
 ===================*/
+/* general styles */
 .flex {
   display: flex;
   gap: var(--gap, 1rem);
@@ -118,6 +119,28 @@ to turn off animation in their website*/
 .grid {
   display: grid;
   gap: var(--gap, 1rem);
+}
+/* andy bell's flow utility class based on lobotomized owl
+for setting up spacing among the components 
+only add margin-top on elements after the first element
+because if we are putting padding on the parent element then parent will alread give space before thefirst element anyway so no need for margin on first element*/
+/* https://andy-bell.co.uk/my-favourite-3-lines-of-css/ */
+/* .flow > * + * {
+  margin-top: 2rem;
+  outline: 1px solid red;
+} */
+/* * + * does not add specifity while :not() does add same specificity as of class selector so just using :not() will make it difficult to overwrite the selectors in future so use :where(:not()) which makes the specificity to 0 or use :is(:not()) is makes the specificity according to :is(id/class/type) meaning whatever selector inside is() has the highest specificity the specificity of is() will be based on that
+ex. .card h1,.card h2,.card h3{}
+instead use .card :where(h1,h2,h3) specicity 0
+or use .card :is(h1,h2,h3) specificity = type 
+*/
+/* check for sanitize css reset */
+.flow > *:where(:not(:first-child)) {
+  margin-top: var(--flow-space, 1rem);
+  /* outline: 1px solid red; */
+}
+.flow-space {
+  --flow-space: 1rem;
 }
 .container {
   padding-inline: 2em;
