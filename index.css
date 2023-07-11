@@ -279,3 +279,162 @@ read out the element to provide context to the listeners about the element*/
   margin-right: 0.5em;
   font-weight: 700;
 }
+/* ================= 
+    Components
+===================*/
+.large-button {
+  position: relative;
+  /* z-index here creates a new stacking context on the large-button and this allows to put multiple things like images/other background-colors/patterns just by manipulating different z-index on those elements
+  ex. .larg-button:z-index:1, .large-button::after z-index:-1, background-image: z-index:0 will put image between large-button and large-button::after, z-index:-10 will put the image below large-button::after; 
+  animation/transitions/z-index creates new stacking context
+  for absolute position item always create a new stacking context*/
+  z-index: 1;
+  /* display grid allows us to easily center the text using place-items/place-content center  */
+  display: grid;
+  /* place-content: center;
+  place-items: it is a shorthand for justify-content:center and align-items center */
+  place-items: center;
+  padding: 0 2em;
+  /* height: 300px;
+  width: 300px; */
+  /* instead of using height/width use modern css approach of aspect-ratio to make a perfect squaure based on padding + font-size */
+  aspect-ratio: 1;
+  border-radius: 50%;
+  text-decoration: none;
+}
+.large-button::after {
+  content: "";
+  /* background: hsl(var(--clr-dark) / 0.2); */
+  position: absolute;
+  z-index: -1;
+  /* top: 0;
+  left: 0; */
+  width: 100%;
+  height: 100%;
+  background: hsl(var(--clr-white) / 0.15);
+  /* background: rgba(100, 100, 100, 0.15); */
+  /* border-radius: 50%; */
+  /* pseudo-element inherits border radius from parent element .large-button */
+  border-radius: inherit;
+  opacity: 0;
+  /* transition: opacity 500ms linear,
+    transform 750ms cubic-bezier(0.03, 0.63, 1, 0.07); */
+  transition: opacity 500ms linear, transform 750ms ease-in-out;
+}
+.large-button:hover::after,
+.large-button:focus::after {
+  opacity: 1;
+  /* animation on width/height are expensive for browser because has to recalculation for repainting/reflowing for animating width and height 
+  transform styles like scale/translate/rotate does not cause any reflowing issue and not expensive for browser
+  and they gpu-accelerated which helps in achieving smoother transitions/animation on the elements */
+  transform: scale(1.5);
+}
+
+.primary-navigation {
+  --gap: 8rem;
+  /* this allows to set the padding on the tabs and push the border-bottom and this variable gives more control to change the padding for different compoents by overwriting this variable in descendant classes/elements */
+  --underline-gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.primary-navigation a {
+  font-family: var(--ff-sans-cond);
+  text-decoration: none;
+}
+.primary-navigation a > span {
+  margin-right: 0.5em;
+  font-weight: 700;
+}
+/* .underline-indicators li */
+.underline-indicators > * {
+  /* using * operator to make the styling robust in order to be able to use on any other element as well */
+  padding: var(--underline-gap, 1rem) 0;
+  cursor: pointer;
+  border: 0;
+  border-bottom: 0.2rem solid hsl(var(--clr-white) / 0);
+  transition: border 0.5s ease;
+}
+/* hover seems to not work on * selector which is less specific than li(type selector) */
+/* .underline-indicators > li/*:hover
+.underline-indicators > li/*:focus
+https://stackoverflow.com/questions/62333305/why-does-hover-pseudo-selector-on-universal-wildcard-selector-seem-to-not-apply
+since design-system.html didn't had <!DOCTYPE html> and instead just had <html> before
+the browsers were interpreting design-system.html as some older html and thus switched to backward/compatible "quirks mode" which emulates older
+browsers to render older html instead of Modern HTML and CSS and that's why *:hover universal selector was not working here */
+.underline-indicators > *:hover,
+.underline-indicators > *:focus {
+  border-color: hsl(var(--clr-white) / 0.25);
+  /* background: red; */
+}
+.underline-indicators > .active,
+.underline-indicators > [aria-selected="true"] {
+  color: hsl(var(--clr-white) / 1);
+  border-color: hsl(var(--clr-white) / 1);
+}
+
+/* one approach of inheriting all the values from the parent div to style the child buttons */
+/* .btn > * { */
+/* --underline-gap: 1rem; */
+/* border-inline: 0;
+  border-top: 0; */
+/* cursor: pointer; */
+/* color: inherit;
+  background-color: inherit;
+  text-transform: inherit;
+  font-family: inherit;
+  letter-spacing: inherit;
+} */
+.tab-list {
+  --gap: 2rem;
+}
+.dot-indicators > * {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 50%;
+  /* width: 0.75em;
+  height: 0.75em; */
+  /* making a perfect square without setting width & height */
+  aspect-ratio: 1/1;
+  padding: 0.5em;
+  background-color: hsl(var(--clr-light) / 0.25);
+}
+.dot-indicators > *:hover,
+.dot-indicators > *:focus {
+  border: 1px solid white;
+  /* background: hsl(var(--clr-light) / 0.5); */
+  color: hsl(var(--clr-white) / 1);
+}
+
+.dot-indicators > [aria-selected="true"] {
+  background: hsl(var(--clr-white) / 1);
+}
+.number-indicators > * {
+  --flow-space: 1rem;
+  font: inherit;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  border: 0;
+  border-radius: 50%;
+  /* width: 0.75em;
+  height: 0.75em; */
+  /* making a perfect square without setting width & height */
+  aspect-ratio: 1/1;
+  padding: 1em;
+  color: hsl(var(--clr-white) / 1);
+  background-color: hsl(var(--clr-dark) / 0.15);
+  border: 1px solid hsl(var(--clr-white) / 0.25);
+}
+.number-indicators > *:hover,
+.number-indicators > *:focus {
+  border-color: hsl(var(--clr-white) / 1);
+  /* background: hsl(var(--clr-light) / 0.5); */
+}
+
+.number-indicators > [aria-selected="true"] {
+  color: hsl(var(--clr-dark));
+  background: hsl(var(--clr-white) / 1);
+}

@@ -1,5 +1,5 @@
 <!-- lesson 7-9 color utility classes challenges-->
-<html>
+<!DOCTYPE html>
   <head>
     <link rel="stylesheet" href="index.css" />
     <title>Design system</title>
@@ -130,6 +130,75 @@
                 Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,
                 dapibus id, mattis vel, nisi.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="flow" id="interactive-buttons">
+        <h2 class="numbered-title"><span>03</span> Interactive elements</h2>
+
+        <!-- navigation -->
+        <div>
+          <nav>
+            <div class="primary-navigation underline-indicators flex">
+              <li class="active">
+                <a class="uppercase text-white letter-spacing-2" href="#"
+                  ><span>01</span>Active</a
+                >
+              </li>
+              <li>
+                <a class="uppercase text-white letter-spacing-2" href="#"
+                  ><span>02</span>Hovered</a
+                >
+              </li>
+              <li>
+                <a class="uppercase text-white letter-spacing-2" href="#"
+                  ><span>03</span>Idle</a
+                >
+              </li>
+            </div>
+          </nav>
+        </div>
+
+        <div class="flex">
+          <div style="margin-top: 5rem">
+            <!-- explore button -->
+            <a
+              href="#"
+              class="large-button bg-white text-dark ff-serif uppercase fs-600"
+              >Explore</a
+            >
+          </div>
+
+          <div class="flow" style="margin-bottom: 50vh">
+            <!-- Tabs -->
+              <!-- buttons are inheriting all the styles from the parent div
+                <div class="btn uppercase ff-san-cond flex underline-indicators letter-spacing-2 bg-dark text-accent">
+                <button class="active">Moon</button>
+                <button class="">Mars</button>
+                <button class="">Europa</button>
+              </div> -->
+              <div class="tab-list flex underline-indicators letter-spacing-2 ">
+               <!-- since  it is a tab-list which presents the content on the same page use aria-selected to help assistive technologies give more context
+               about which tab is open right now
+               for list/links use classes because each list/link opens up a new webpage and that's why classes are preferred over there to toggle styles/webpages on links
+               whereas in tab-lists we can use aria-selected attribute to toggle different content on the same page using JS -->
+                <button aria-selected="true" class=" uppercase ff-sans-cond letter-spacing-2 bg-dark text-accent">Moon</button>
+                <button aria-selected="false" class="uppercase ff-sans-cond letter-spacing-2 bg-dark text-accent">Mars</button>
+                <button aria-selected="false" class="uppercase ff-sans-cond letter-spacing-2 bg-dark text-accent">Europa</button>
+              </div>
+            <!-- Dots -->
+            <div class="dot-indicators flex  " style="--flow-space:4rem">
+              <!-- sr-only visually hides the content, but for the screen reader the content provides the context regarding the slide butttons which they can announce to the listeners -->
+               <button aria-selected="true" class=""><span class="sr-only">Style-1</span></button>
+               <button aria-selected="false" class=""><span class="sr-only">Style-2</span></button>
+               <button aria-selected="false" class=""><span class="sr-only">Style-3</span></button>
+             </div>
+            <!-- Numbers -->
+            <div class="number-indicators ff-serif fs-600 flow " style="--flow-space:4rem ;">
+              <button aria-selected="true">1</button>
+              <button aria-selected="false">2</button>
+              <button aria-selected="false">3</button>
             </div>
           </div>
         </div>
