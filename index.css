@@ -15,19 +15,38 @@
   rem works on the default browser font-size settings so it won't overwrite
   default/changed browser settings nd make the site appear as designed
   with things appearing big/small as they were designed in predictable ways */
-  --fs-900: 9.875rem;
-  --fs-800: 6.25rem;
-  --fs-700: 3.5rem;
-  --fs-600: 2rem;
-  --fs-500: 1.75rem;
-  --fs-400: 1.125rem;
-  --fs-300: 1rem;
+  --fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
+  --fs-800: 3.5rem;
+  --fs-700: 1.75rem;
+  --fs-600: 1.5rem;
+  --fs-500: 1.25rem;
+  --fs-400: 1rem;
+  --fs-300: 0.9375rem;
   --fs-200: 0.875rem;
 
   /* font-families */
   --ff-serif: "Bellefair", serif;
   --ff-sans-cond: "Barlow Condensed", sans-serif;
   --ff-sans-normal: "Barlow", sans-serif;
+}
+@media (min-width: 35em) {
+  :root {
+    --fs-800: 5rem;
+    --fs-700: 2.5rem;
+    --fs-600: 1.5rem;
+    --fs-400: 1rem;
+  }
+}
+@media (min-width: 45em) {
+  :root {
+    --fs-800: 6.25rem;
+    --fs-700: 3.5rem;
+    --fs-600: 2rem;
+    --fs-500: 1.75rem;
+    --fs-400: 1.125rem;
+    --fs-300: 1rem;
+    --fs-200: 0.875rem;
+  }
 }
 
 /* ================= 
@@ -72,8 +91,27 @@ body {
   font-size: var(--fs-400);
   color: hsl(var(--clr-white));
   background: hsl(var(--clr-dark));
+  /* by default line-height is 1.1/1.2, wcag specification says put line-height: 1.5; for accesibility and better readability reason for users who can't read smaller text*/
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#accessibility_concerns
+  Use a minimum value of 1.5 for line-height for main paragraph content. This will help people experiencing low vision conditions, as well as people with cognitive concerns such as Dyslexia. If the page is zoomed to increase the text size, using a unitless value ensures that the line height will scale proportionately. */
   line-height: 1.5; /*browser default is 1.4/1.5*/
+
+  /* since we want the home page to always cover the entire height every time in every screen the user visits */
+  /* if we set height to 100vh and the content inside is more than then the content overflows out of the body
+  min-height allows for overflowing content inside the body */
+  /* border: 1px solid red; */
+  /* https://stackoverflow.com/questions/65003407/setting-height100vh-vs-min-height100vh */
+
   min-height: 100vh; /*all the pages are bigger in size and avoid smaller pages on the display and never allow website size to go smaller*/
+
+  display: grid;
+  /* grid stretches the content inside the fit the height and width of the container/body/screen */
+  /* and equally divides/provides space between each child element */
+  /* to control the space between the child elements use grid-template-rows */
+  /* header just take the space for its content(min-content) and body text takes up the whole remaining space */
+  grid-template-rows: min-content 1fr;
+  /* when we use animation using transform-translate there are chances of oveflow happening so remove the overflow */
+  overflow-x: hidden;
 }
 
 /* make images easier to work with */
@@ -107,15 +145,36 @@ to turn off animation in their website*/
     scroll-behavior: auto !important;
   }
 }
+/* that removing list bullets with `list-style: none` removes <ul/ol> semantics in VoiceOver.
+Adding zero-width space fixes this; so this is yet another thing to add to our base #CSS files. #a11y  */
+/* https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html
+https://andy-bell.co.uk/a-modern-css-reset/ */
+:where(ul[role="list"]) {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+}
 
 /* ================= 
     Utility Classes
 ===================*/
 /* general styles */
+.d-block {
+  display: block;
+}
 .flex {
   display: flex;
   gap: var(--gap, 1rem);
 }
+
+/* for container flex approach
+.flex.even-columns > * {
+  width: 100%;
+  outline: 1px solid greenyellow;
+} */
 .grid {
   display: grid;
   gap: var(--gap, 1rem);
@@ -147,7 +206,58 @@ or use .card :is(h1,h2,h3) specificity = type
   max-width: 80rem;
   margin-inline: auto;
 }
+.grid-container {
+  /* border: 1px solid limegreen; */
+  display: grid;
+  text-align: center;
+  /* place-items is short for align-items & justify-items together
+  place-content is short for align-content & justify-content together */
+  /* place-content: center;
+  row-gap: 10%; */
+  place-items: center;
+  padding-inline: 1rem;
+}
+.grid-container * {
+  max-width: 50ch;
+}
 
+/* .flex-container {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.flex-container > * {
+  flex-basis: 40%;
+} */
+/* around 45rem tablets get maxed out and so move into desktop layout post 45rem */
+@media (min-width: 45em) {
+  .grid-container {
+    text-align: left;
+    column-gap: var(--container-gap, 2rem);
+    grid-template-columns: minmax(1rem, 1fr) repeat(2, minmax(0, 30rem)) minmax(
+        1rem,
+        1fr
+      );
+  }
+  .grid-container > *:first-child {
+    grid-column: 2;
+    padding: 0;
+    /* outline: 1px solid red; */
+  }
+  .grid-container > *:last-child {
+    grid-column: 3;
+    /* outline: 1px solid yellow; */
+  }
+  .grid-container--home {
+    align-items: end;
+    /* dynamically change bottom padding on large screen sizes and setting min padding to 6rem */
+    padding-bottom: max(6rem, 10vh);
+  }
+  /* .flex-container {
+    flex-direction: row; 
+  } */
+}
 /*for accessibility: to visually hide the element
 screen readers can read the text inside the element but visually it will be hidden
 read out the element to provide context to the listeners about the element*/
@@ -165,7 +275,28 @@ read out the element to provide context to the listeners about the element*/
   white-space: nowrap;
   border: 0;
 }
-
+/* .skip-to-content:focus {
+  position: relative;
+  width: max-content;
+  height: auto;
+  background: white;
+  color: black;
+  clip-path: 0;
+ } */
+.skip-to-content {
+  position: absolute;
+  z-index: 9999;
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  padding: 0.5em 1em;
+  margin-inline: auto;
+  /* move 100% of its own height */
+  transform: translateY(-100%);
+  transition: transform 0 25s ease-in;
+}
+.skip-to-content:focus {
+  transform: translateY(0);
+}
 .box {
   background: lightblue;
   padding: 3rem;
@@ -175,7 +306,7 @@ read out the element to provide context to the listeners about the element*/
   /* changing/setting value of --gap variable for .flex/.grid from here */
   /* --gap: 5rem; */
   background: pink;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   padding: 2rem;
 }
 
@@ -283,6 +414,7 @@ read out the element to provide context to the listeners about the element*/
     Components
 ===================*/
 .large-button {
+  font-size: 2rem;
   position: relative;
   /* z-index here creates a new stacking context on the large-button and this allows to put multiple things like images/other background-colors/patterns just by manipulating different z-index on those elements
   ex. .larg-button:z-index:1, .large-button::after z-index:-1, background-image: z-index:0 will put image between large-button and large-button::after, z-index:-10 will put the image below large-button::after; 
@@ -290,7 +422,9 @@ read out the element to provide context to the listeners about the element*/
   for absolute position item always create a new stacking context*/
   z-index: 1;
   /* display grid allows us to easily center the text using place-items/place-content center  */
-  display: grid;
+  /* by default grid makes the outer/parent element block element so it makes the element cover the entire width of the screen
+  so to not make the button take up the whole width change the display to inline-grid */
+  display: inline-grid;
   /* place-content: center;
   place-items: it is a shorthand for justify-content:center and align-items center */
   place-items: center;
@@ -319,34 +453,190 @@ read out the element to provide context to the listeners about the element*/
   opacity: 0;
   /* transition: opacity 500ms linear,
     transform 750ms cubic-bezier(0.03, 0.63, 1, 0.07); */
-  transition: opacity 500ms linear, transform 750ms ease-in-out;
+  /* transition: opacity 500ms linear, transform 750ms ease-in-out; */
 }
 .large-button:hover::after,
 .large-button:focus::after {
-  opacity: 1;
+  /* opacity: 1; */
   /* animation on width/height are expensive for browser because has to recalculation for repainting/reflowing for animating width and height 
   transform styles like scale/translate/rotate does not cause any reflowing issue and not expensive for browser
   and they gpu-accelerated which helps in achieving smoother transitions/animation on the elements */
   transform: scale(1.5);
-}
 
+  /* the pseudo element animation creates blinking effect behind the button */
+  /* animation: scale 500ms ease alternate both;
+  animation-iteration-count: infinite; */
+}
+/* @keyframes scale {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+} */
+
+/* primary-header */
+.logo {
+  /* doesnt' required 5vw + 1rem here becuase the layout won't be zoomed by the user  */
+  /* 5vw + 1rem is required in typography because viewport units don't zoom and are fixed to the screen size  while rem units zoom when user zooms in on the text  and user generally zoom text to see better  */
+  margin: 1.5rem clamp(1.5rem, 5vw, 3.5rem);
+}
+.primary-header {
+  justify-content: space-between;
+  align-items: center;
+}
 .primary-navigation {
-  --gap: 8rem;
+  --gap: clamp(1.5rem, 5vw, 3rem);
   /* this allows to set the padding on the tabs and push the border-bottom and this variable gives more control to change the padding for different compoents by overwriting this variable in descendant classes/elements */
   --underline-gap: 2rem;
   list-style: none;
   padding: 0;
   margin: 0;
+  /* implementing glass-morphism for navigation background */
+  background: hsl(var(--clr-dark) / 0.95);
 }
 
 .primary-navigation a {
+  /* position: absolute; */
   font-family: var(--ff-sans-cond);
   text-decoration: none;
+  white-space: nowrap;
 }
 .primary-navigation a > span {
   margin-right: 0.5em;
   font-weight: 700;
 }
+
+@supports (backdrop-filter: blur(1.5rem)) {
+  .primary-navigation {
+    background: hsl(var(--clr-white) / 0.05);
+    backdrop-filter: blur(1.5rem);
+  }
+}
+.mobile-nav-toggle {
+  display: none;
+}
+@media (max-width: 35em) {
+  .primary-navigation {
+    will-change: transform;
+    transform: translateZ(0);
+    transform: translateX(100%);
+    /* animation: slide 0.5s ease; */
+    /* animation-iteration-count: infinite; */
+    transition: transform 0.5s ease-in-out;
+  }
+  /* @keyframes slide {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  } */
+  .primary-navigation {
+    /* this allows to set the padding on the tabs and push the border-bottom and this variable gives more control to change the padding for different compoents by overwriting this variable in descendant classes/elements */
+    --underline-gap: 0.5rem;
+    flex-direction: column;
+    position: fixed;
+    /* top: 0;
+    right: 0; */
+    /* bottom: 0; */
+    /* left: 30%; */
+
+    inset: 0 0 0 30%;
+    /* since the button shows on top of the navbar put the zindex to show navbar on the top of everything */
+
+    z-index: 1000;
+    padding: min(20rem, 15vh) 2rem;
+    /* visibility: hidden; */
+    /* will-change: transform; */
+    /* https://codeburst.io/low-performance-css-transitions-and-some-alternatives-f84ff35bf07 */
+    /* left: 100%; */
+    /* transform: translateX(100%);
+    transition: transform 0.5s ease-in-out; */
+  }
+
+  /* .primary-navigation.open {
+    transform: translate(0%);
+  } */
+  .primary-navigation[data-visible="true"] {
+    /* visibility: visible; */
+    /* opacity: 1; */
+    transform: translateX(0%);
+    /* left: 40%; */
+  }
+  /* .mobile-nav-toggle.open {
+    background-image: url(./assets/shared/icon-close.svg);
+  } */
+
+  /* .underline-indicators is going to be used in other components as well and we have to only change the style for primary-navigation only and that too  in mobile so use more specific approach as shown below */
+  .primary-navigation.underline-indicators > .active {
+    border: 0;
+  }
+  .mobile-nav-toggle {
+    display: block;
+    position: absolute;
+    top: 2rem;
+    right: 1rem;
+    z-index: 2000;
+    background: transparent;
+    background-image: url(./assets/shared/icon-hamburger.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 0;
+    width: 1.5rem;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+  .mobile-nav-toggle[aria-expanded="true"] {
+    background-image: url(./assets/shared/icon-close.svg);
+  }
+  /* enable the outline when clicked on the menu button using tab key in keyboard */
+  .mobile-nav-toggle:focus-visible {
+    outline: 5px solid white;
+    outline-offset: 5px;
+  }
+}
+@media (min-width: 35em) {
+  .primary-navigation {
+    padding-inline: clamp(1rem, 5vw, 5rem);
+    /* padding-inline: clamp(3rem, 7vw, 7rem); */
+  }
+}
+@media (min-width: 35em) and (max-width: 44.999em) {
+  .primary-navigation {
+    padding-inline: 3rem;
+  }
+  .primary-navigation a > span {
+    display: none;
+  }
+}
+@media (min-width: 45em) {
+  .primary-header::after {
+    content: "";
+    /* position relative makes the element part of the DOM
+    position absollute takes the element out of the DOM flow */
+    position: relative;
+    display: block;
+    height: 3px;
+    width: 100%;
+    margin-right: -2.5rem;
+    z-index: 10;
+    background: hsl(var(--clr-white) / 0.25);
+    order: 1;
+  }
+  nav {
+    order: 2;
+  }
+
+  .primary-navigation {
+    margin-block: 2rem;
+  }
+}
+
 /* .underline-indicators li */
 .underline-indicators > * {
   /* using * operator to make the styling robust in order to be able to use on any other element as well */
@@ -403,7 +693,7 @@ browsers to render older html instead of Modern HTML and CSS and that's why *:ho
 }
 .dot-indicators > *:hover,
 .dot-indicators > *:focus {
-  border: 1px solid white;
+  /* border: 1px solid white; */
   /* background: hsl(var(--clr-light) / 0.5); */
   color: hsl(var(--clr-white) / 1);
 }
@@ -437,4 +727,33 @@ browsers to render older html instead of Modern HTML and CSS and that's why *:ho
 .number-indicators > [aria-selected="true"] {
   color: hsl(var(--clr-dark));
   background: hsl(var(--clr-white) / 1);
+}
+
+/* ================= 
+    page specific background
+===================*/
+body {
+  /* since we are using background-size cover we can avoid using background-repeat:no-repeat 
+  because cover crops the image to fit the container */
+  background-size: cover;
+  /* for mobile we want to show planet image behind explore button */
+  background-position: bottom center;
+}
+/* home */
+.home {
+  background-image: url(./assets/home/background-home-mobile.jpg);
+}
+
+@media (min-width: 35em) {
+  .home {
+    /* to make the text more readable in tables change the background position of the image to push it down of the text */
+    background-position: center center;
+    background-image: url(./assets/home/background-home-tablet.jpg);
+  }
+}
+
+@media (min-width: 45em) {
+  .home {
+    background-image: url(./assets/home/background-home-desktop.jpg);
+  }
 }
