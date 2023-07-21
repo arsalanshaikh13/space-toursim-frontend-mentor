@@ -34,6 +34,7 @@
     --fs-800: 5rem;
     --fs-700: 2.5rem;
     --fs-600: 1.5rem;
+    --fs-500: 1.25rem;
     --fs-400: 1rem;
   }
 }
@@ -206,58 +207,7 @@ or use .card :is(h1,h2,h3) specificity = type
   max-width: 80rem;
   margin-inline: auto;
 }
-.grid-container {
-  /* border: 1px solid limegreen; */
-  display: grid;
-  text-align: center;
-  /* place-items is short for align-items & justify-items together
-  place-content is short for align-content & justify-content together */
-  /* place-content: center;
-  row-gap: 10%; */
-  place-items: center;
-  padding-inline: 1rem;
-}
-.grid-container * {
-  max-width: 50ch;
-}
 
-/* .flex-container {
-  border: 1px solid red;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-.flex-container > * {
-  flex-basis: 40%;
-} */
-/* around 45rem tablets get maxed out and so move into desktop layout post 45rem */
-@media (min-width: 45em) {
-  .grid-container {
-    text-align: left;
-    column-gap: var(--container-gap, 2rem);
-    grid-template-columns: minmax(1rem, 1fr) repeat(2, minmax(0, 30rem)) minmax(
-        1rem,
-        1fr
-      );
-  }
-  .grid-container > *:first-child {
-    grid-column: 2;
-    padding: 0;
-    /* outline: 1px solid red; */
-  }
-  .grid-container > *:last-child {
-    grid-column: 3;
-    /* outline: 1px solid yellow; */
-  }
-  .grid-container--home {
-    align-items: end;
-    /* dynamically change bottom padding on large screen sizes and setting min padding to 6rem */
-    padding-bottom: max(6rem, 10vh);
-  }
-  /* .flex-container {
-    flex-direction: row; 
-  } */
-}
 /*for accessibility: to visually hide the element
 screen readers can read the text inside the element but visually it will be hidden
 read out the element to provide context to the listeners about the element*/
@@ -414,6 +364,7 @@ read out the element to provide context to the listeners about the element*/
     Components
 ===================*/
 .large-button {
+  /* the button's font-size is same in all the screens so hard-code the font-size */
   font-size: 2rem;
   position: relative;
   /* z-index here creates a new stacking context on the large-button and this allows to put multiple things like images/other background-colors/patterns just by manipulating different z-index on those elements
@@ -756,4 +707,162 @@ body {
   .home {
     background-image: url(./assets/home/background-home-desktop.jpg);
   }
+}
+
+/* ================= 
+    Layout 
+===================*/
+.grid-container {
+  /* border: 1px solid limegreen; */
+  display: grid;
+  text-align: center;
+  /* place-items is short for align-items & justify-items together
+  place-content is short for align-content & justify-content together */
+  /* place-content: center;
+  row-gap: 10%; */
+  place-items: center;
+  padding-inline: 1rem;
+  /* adding padding-bottom in order create some space at the bottom 
+  other the content touches the bottom of the page*/
+  padding-bottom: 4rem;
+}
+/* .grid-container * { */
+/* since we only to set max-width on the contents based paragraph */
+.grid-container p:not([class]) {
+  max-width: 50ch;
+  /* outline: 2px solid limegreen; */
+}
+
+/* .flex-container {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.flex-container > * {
+  flex-basis: 40%;
+} */
+/* since the title remain same for all the tabs which is what we are going to use for each tab grid-template-areas */
+/* numbered-title is generic utititly grid-area going to be used in multiple different pages */
+.numbered-title {
+  grid-area: title;
+}
+/* destination layout 
+all the layout style specific to destination page*/
+.grid-container--destination {
+  /* control flow space from here */
+  --flow-space: 2rem;
+  grid-template-areas:
+    "title"
+    "image"
+    "tabs"
+    "content";
+}
+.grid-container--destination > img {
+  grid-area: image;
+  max-width: 60%;
+}
+.grid-container--destination > .tab-list {
+  grid-area: tabs;
+}
+.grid-container--destination > .destination-info {
+  grid-area: content;
+}
+.destination-meta {
+  flex-direction: column;
+  border-top: 1px solid hsl(var(--clr-white) / 0.1);
+  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+  /* all the children in the destination-meta inherit text-align center from the grid-container
+  but the contents inside destination meta are not centrally aligned as per the detaination meta container 
+  so align-items center solve that issue
+  also destination-meta max-width is 50ch set in .grid-container * due to which its width was not matching the grid-container cell width due to which the 
+  text-align center was not aligning perfectly with the heading text above it solving that issue using align-items center here */
+  /* align-items: center; */
+}
+.destination-meta p {
+  /* font-sizes for all screen is the same for the paragraph */
+  font-size: 1.75rem;
+}
+@media (min-width: 35em) {
+  .grid-container--destination .numbered-title {
+    /* text-align: left; */
+    /* place-self: left; */
+    /* border: 1px solid red; */
+    justify-self: start;
+    /* another way to text align left*/
+    /* display: block;
+    margin-right: auto; */
+    /* in design there is more space above title in medium and large screen */
+    margin-block-start: 2rem;
+  }
+  .destination-meta {
+    flex-direction: row;
+    /* text-align: left; */
+    justify-content: space-evenly;
+  }
+}
+
+/* around 45rem tablets get maxed out and so move into desktop layout post 45rem */
+@media (min-width: 45em) {
+  .grid-container {
+    text-align: left;
+    column-gap: var(--container-gap, 2rem);
+    grid-template-columns: minmax(1rem, 1fr) repeat(2, minmax(0, 30rem)) minmax(
+        1rem,
+        1fr
+      );
+  }
+
+  /* .grid-container--home > *:first-child  this caused the numbered title in the destination page to span across two columns
+  this child configuration is only specifically needed for home page */
+  .grid-container--home > *:first-child {
+    grid-column: 2;
+    padding: 0;
+    /* outline: 1px solid red; */
+  }
+  .grid-container--home > *:last-child {
+    grid-column: 3;
+    /* outline: 1px solid yellow; */
+  }
+  .grid-container--home {
+    align-items: end;
+    /* dynamically change bottom padding on large screen sizes and setting min padding to 6rem */
+    padding-bottom: max(6rem, 10vh);
+  }
+  /* .flex-container {
+    flex-direction: row; 
+  } */
+  .grid-container--destination {
+    justify-items: start;
+    /* for taller screens (simulate taller screen by making desktop size 50% in chrome responsive mode)
+    due to place-items:center style set in grid-container the all the element/children of grid-container are placed 
+    in the center of their respective cell spaces
+    so for taller screen use align-content start to place all the content inside each cell of the grid-container
+    to display/arrange them on the top of the cell instead expanding giving all the extra spaces inside each cell due to place-items center` */
+    align-content: start;
+    grid-template-areas:
+    /* since in the grid-container we are having flexible spaces before and after content using minmax()
+    in order to accomodate those space use '.' in our grid-template areas */
+      ". title title . "
+      ". image tabs ."
+      ". image content .";
+  }
+  /* .tab-list {
+    since we are putting justify items left on the grid-container--destinatino so no need for this
+    margin-right: auto;
+  } */
+  .destination-meta {
+    --gap: min(6vw, 6rem);
+    /* outline: 2px solid red; */
+    justify-content: flex-start;
+  }
+  .grid-container--destination > img {
+    max-width: 100%;
+  }
+  /* .destination-meta > * { */
+  /* the heading was wrapping on small screen-sizes so to remove wrapping use below style */
+  /* white-space: nowrap; */
+  /* since we are setting gap using min() in .destaination-meta so no need for nowrap here */
+  /* } */
 }
