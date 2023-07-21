@@ -202,6 +202,10 @@ or use .card :is(h1,h2,h3) specificity = type
 .flow-space {
   --flow-space: 1rem;
 }
+
+.flow--space-small {
+  --flow-space: 0.75rem;
+}
 .container {
   padding-inline: 2em;
   max-width: 80rem;
@@ -596,6 +600,8 @@ read out the element to provide context to the listeners about the element*/
   border: 0;
   border-bottom: 0.2rem solid hsl(var(--clr-white) / 0);
   transition: border 0.5s ease;
+  /* making the tab buttons transparent as per the design to blend with the background */
+  background-color: transparent;
 }
 /* hover seems to not work on * selector which is less specific than li(type selector) */
 /* .underline-indicators > li/*:hover
@@ -630,6 +636,9 @@ browsers to render older html instead of Modern HTML and CSS and that's why *:ho
 .tab-list {
   --gap: 2rem;
 }
+/* .tab-list > * {
+  background: transparent;
+} */
 .dot-indicators > * {
   font: inherit;
   cursor: pointer;
@@ -708,6 +717,42 @@ body {
     background-image: url(./assets/home/background-home-desktop.jpg);
   }
 }
+/* destination */
+.destination {
+  background-image: url(./assets/destination/background-destination-mobile.jpg);
+}
+
+@media (min-width: 35em) {
+  .destination {
+    /* to make the text more readable in tables change the background position of the image to push it down of the text */
+    background-position: center center;
+    background-image: url(./assets/destination/background-destination-tablet.jpg);
+  }
+}
+
+@media (min-width: 45em) {
+  .destination {
+    background-image: url(./assets/destination/background-destination-desktop.jpg);
+  }
+}
+/* crew */
+.crew {
+  background-image: url(./assets/crew/background-crew-mobile.jpg);
+}
+
+@media (min-width: 35em) {
+  .crew {
+    /* to make the text more readable in tables change the background position of the image to push it down of the text */
+    background-position: center center;
+    background-image: url(./assets/crew/background-crew-tablet.jpg);
+  }
+}
+
+@media (min-width: 45em) {
+  .crew {
+    background-image: url(./assets/crew/background-crew-desktop.jpg);
+  }
+}
 
 /* ================= 
     Layout 
@@ -758,7 +803,7 @@ all the layout style specific to destination page*/
     "tabs"
     "content";
 }
-.grid-container--destination > img {
+.grid-container--destination > picture {
   grid-area: image;
   max-width: 60%;
 }
@@ -784,8 +829,35 @@ all the layout style specific to destination page*/
   /* font-sizes for all screen is the same for the paragraph */
   font-size: 1.75rem;
 }
+
+/* crew layout */
+.grid-container--crew {
+  grid-template-areas:
+    "title"
+    "image"
+    "dot-list"
+    "content";
+}
+.grid-container--crew > picture {
+  max-width: 60%;
+  grid-area: image;
+  border-bottom: 1px solid hsl(var(--clr-white) / 0.1);
+}
+.grid-container--crew > .dot-indicators {
+  grid-area: dot-list;
+}
+.grid-container--crew > .crew-details {
+  grid-area: content;
+}
+.crew-details h2 {
+  /* opacity: 0.5; */
+  color: hsl(var(--clr-white) / 0.5);
+}
 @media (min-width: 35em) {
-  .grid-container--destination .numbered-title {
+  /* .grid-container--destination > .numbered-title,
+  .grid-container--crew > .numbered-title { */
+  /* .numbered-title style is repeated for multiple layouts so no need to add more specificity to it */
+  .numbered-title {
     /* text-align: left; */
     /* place-self: left; */
     /* border: 1px solid red; */
@@ -801,6 +873,30 @@ all the layout style specific to destination page*/
     /* text-align: left; */
     justify-content: space-evenly;
   }
+
+  /* .grid-container {
+    padding-bottom: 0;
+  } */
+  .grid-container--crew {
+    /* since gric-container-crew is a modification to the grid-container and due to it being cascading ie coming after grid-container 
+    so applying/modifying padding-bottom here will override grid-container padding bottom */
+    padding-bottom: 0;
+    grid-template-areas:
+      "title"
+      "content"
+      "dot-list"
+      "image";
+  }
+  /* .grid-container--crew > picture { */
+  /* in order to make the image stuck to the bottom of the screen and since the grid-container extend till the bottom of the screen
+    using align-self end will push the image to the bottom */
+  /* align-self: end; */
+  /* } */
+
+  /* .grid-container--crew > .numbered-title {
+    justify-self: start;
+    margin-top: 2rem;
+  } */
 }
 
 /* around 45rem tablets get maxed out and so move into desktop layout post 45rem */
@@ -857,7 +953,8 @@ all the layout style specific to destination page*/
     /* outline: 2px solid red; */
     justify-content: flex-start;
   }
-  .grid-container--destination > img {
+  .grid-container--destination > picture,
+  .grid-container--crew > picture {
     max-width: 100%;
   }
   /* .destination-meta > * { */
@@ -865,4 +962,17 @@ all the layout style specific to destination page*/
   /* white-space: nowrap; */
   /* since we are setting gap using min() in .destaination-meta so no need for nowrap here */
   /* } */
+
+  .grid-container--crew {
+    /* align-content: end; */
+    justify-items: start;
+    place-items: start;
+    grid-template-areas:
+      ". title image ."
+      ". content image ."
+      ". dot-list image .";
+  }
+  /* .grid-container--crew > .dot-indicators {
+    justify-self: start;
+  } */
 }
