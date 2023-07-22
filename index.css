@@ -116,12 +116,12 @@ body {
 }
 
 /* make images easier to work with */
-img,
-picture {
+:where(img, picture) {
   /* shrink images as per screen size but never allow images to grow beyond its original size */
   max-width: 100%;
   /* remove the space below image which appears since images are inline by default */
   display: block;
+  /* display block is not allowing hidden attribute to work below despite using :where() which reduces the specificity to 0 */
 }
 /* make form elements easier to work with */
 input,
@@ -157,6 +157,23 @@ https://andy-bell.co.uk/a-modern-css-reset/ */
 }
 a {
   text-decoration: none;
+}
+
+/* in chrome user-agent source code 'hidden' attribute is implemented as below
+but in some elements due to less specificity of user-agent hidden style it is not able to implement on picture
+so by overriding native-user-agent-chrome source code css style by below code(since author specificity is more prioritize over usere-agent specificity
+we can implement hidden attribute) */
+/* the display block on img,picture(because it is in your/author css) above was overriding user-agent(chrome css) style  hidden attribute  ie hidden attribute of html
+so it was not working on picture element */
+/* https://github.com/twbs/bootstrap/issues/15274
+https://stackoverflow.com/questions/28424906/hidden-attribute-not-working-in-bootstrap */
+[hidden] {
+  /* setup reset for your/author css to override user-agent css and also make hidden attribute work */
+  /* in kevin's tutorial he had misspelled picture so display block was not set in his picture element */
+  /* so just writing hidden attribute on html worked for kevin because his picture element didn't author display block but rather had user-agent display inline by default */
+  display: none;
+  /*  the more aggresive specific version */
+  /* display: none !important; */
 }
 
 /* ================= 
