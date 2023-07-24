@@ -1,4 +1,4 @@
-/* ================= 
+/* =================
     Custom Properties
 ===================*/
 :root {
@@ -50,7 +50,7 @@
   }
 }
 
-/* ================= 
+/* =================
     Resets
 ===================*/
 
@@ -132,8 +132,8 @@ textarea {
   font: inherit;
 }
 
-/* Remove all animations, transitions  for people that prefer not to see them 
-this is important for accessibility reasons because for some people animations make them feel sick and 
+/* Remove all animations, transitions  for people that prefer not to see them
+this is important for accessibility reasons because for some people animations make them feel sick and
 they turn off animation in their browser/OS so remove animation from your site for those people who have chosen
 to turn off animation in their website*/
 @media (prefers-reduced-motion: reduce) {
@@ -176,7 +176,7 @@ https://stackoverflow.com/questions/28424906/hidden-attribute-not-working-in-boo
   /* display: none !important; */
 }
 
-/* ================= 
+/* =================
     Utility Classes
 ===================*/
 /* general styles */
@@ -198,7 +198,7 @@ https://stackoverflow.com/questions/28424906/hidden-attribute-not-working-in-boo
   gap: var(--gap, 1rem);
 }
 /* andy bell's flow utility class based on lobotomized owl
-for setting up spacing among the components 
+for setting up spacing among the components
 only add margin-top on elements after the first element
 because if we are putting padding on the parent element then parent will alread give space before thefirst element anyway so no need for margin on first element*/
 /* https://andy-bell.co.uk/my-favourite-3-lines-of-css/ */
@@ -209,7 +209,7 @@ because if we are putting padding on the parent element then parent will alread 
 /* * + * does not add specifity while :not() does add same specificity as of class selector so just using :not() will make it difficult to overwrite the selectors in future so use :where(:not()) which makes the specificity to 0 or use :is(:not()) is makes the specificity according to :is(id/class/type) meaning whatever selector inside is() has the highest specificity the specificity of is() will be based on that
 ex. .card h1,.card h2,.card h3{}
 instead use .card :where(h1,h2,h3) specicity 0
-or use .card :is(h1,h2,h3) specificity = type 
+or use .card :is(h1,h2,h3) specificity = type
 */
 /* check for sanitize css reset */
 .flow > *:where(:not(:first-child)) {
@@ -233,8 +233,8 @@ or use .card :is(h1,h2,h3) specificity = type
 screen readers can read the text inside the element but visually it will be hidden
 read out the element to provide context to the listeners about the element*/
 .sr-only {
-  /* can't use display:none to hide elements because it will take the element out of the 
-  DOM, this class and properties/style keeps the element inside the DOM and accessible to 
+  /* can't use display:none to hide elements because it will take the element out of the
+  DOM, this class and properties/style keeps the element inside the DOM and accessible to
   screen reader while visually hides the element */
   position: absolute;
   width: 1px;
@@ -254,17 +254,42 @@ read out the element to provide context to the listeners about the element*/
   color: black;
   clip-path: 0;
  } */
-.skip-to-content {
+/* .skip-to-content {
   position: absolute;
   z-index: 9999;
   background: hsl(var(--clr-white));
   color: hsl(var(--clr-dark));
   padding: 0.5em 1em;
   margin-inline: auto;
-  /* move 100% of its own height */
+   move 100% of its own height
   transform: translateY(-100%);
-  transition: transform 0 25s ease-in;
+  transition: transform 0.25s ease-in;
+} */
+/* since .skip-to-content is child of body which has display grid with first row set to min-content and next rows to auto
+.skip-to-content despite being display inline block takes up whole width due to it being child of body which is grid container
+so take out the .skip-to-content from the flow of the body/page using position absolute */
+.skip-to-content {
+  /* take out skip-to-content from the flow of the body */
+  position: absolute;
+  text-decoration: underline;
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  padding: 0.5em 1em;
+  /* https://stackoverflow.com/questions/9998260/css-absolute-position-wont-work-with-margin-leftauto-margin-right-auto */
+  /* in order to make margin-inline auto to work we need to set up width on the element and set left 0 and right 0 for absolute position elements so position absolute takes up whole screen width and we can position element using margin-inline auto */
+  left: 0;
+  right: 0;
+  /* 30% width of screen due left 0 and right 0 */
+  /* width: 30%; */
+  /* restrict the width to content size + padding only instead of taking % of screen size */
+  width: max-content;
+  margin-inline: auto;
+  z-index: 9999;
+  /* transaltey(-100%) will move the skip to content away(100% means 100% of y distance/height of skip-to-content element)  from the visible page */
+  transform: translateY(-100%);
+  transition: transform 0.4s ease;
 }
+
 .skip-to-content:focus {
   transform: translateY(0);
 }
@@ -381,7 +406,7 @@ read out the element to provide context to the listeners about the element*/
   margin-right: 0.5em;
   font-weight: 700;
 }
-/* ================= 
+/* =================
     Components
 ===================*/
 .large-button {
@@ -389,7 +414,7 @@ read out the element to provide context to the listeners about the element*/
   font-size: 2rem;
   position: relative;
   /* z-index here creates a new stacking context on the large-button and this allows to put multiple things like images/other background-colors/patterns just by manipulating different z-index on those elements
-  ex. .larg-button:z-index:1, .large-button::after z-index:-1, background-image: z-index:0 will put image between large-button and large-button::after, z-index:-10 will put the image below large-button::after; 
+  ex. .larg-button:z-index:1, .large-button::after z-index:-1, background-image: z-index:0 will put image between large-button and large-button::after, z-index:-10 will put the image below large-button::after;
   animation/transitions/z-index creates new stacking context
   for absolute position item always create a new stacking context*/
   z-index: 1;
@@ -423,14 +448,15 @@ read out the element to provide context to the listeners about the element*/
   /* pseudo-element inherits border radius from parent element .large-button */
   border-radius: inherit;
   opacity: 0;
+  /* transform: scale(1); */
   /* transition: opacity 500ms linear,
     transform 750ms cubic-bezier(0.03, 0.63, 1, 0.07); */
-  /* transition: opacity 500ms linear, transform 750ms ease-in-out; */
+  transition: opacity 500ms linear, transform 750ms ease-in-out;
 }
 .large-button:hover::after,
 .large-button:focus::after {
-  /* opacity: 1; */
-  /* animation on width/height are expensive for browser because has to recalculation for repainting/reflowing for animating width and height 
+  opacity: 1;
+  /* animation on width/height are expensive for browser because has to recalculation for repainting/reflowing for animating width and height
   transform styles like scale/translate/rotate does not cause any reflowing issue and not expensive for browser
   and they gpu-accelerated which helps in achieving smoother transitions/animation on the elements */
   transform: scale(1.5);
@@ -439,7 +465,7 @@ read out the element to provide context to the listeners about the element*/
   /* animation: scale 500ms ease alternate both;
   animation-iteration-count: infinite; */
 }
-/* @keyframes scale {
+@keyframes scale {
   0% {
     transform: scale(0);
     opacity: 0;
@@ -448,7 +474,7 @@ read out the element to provide context to the listeners about the element*/
     transform: scale(1.5);
     opacity: 1;
   }
-} */
+}
 
 /* primary-header */
 .logo {
@@ -706,11 +732,11 @@ browsers to render older html instead of Modern HTML and CSS and that's why *:ho
   background: hsl(var(--clr-white) / 1);
 }
 
-/* ================= 
+/* =================
     page specific background
 ===================*/
 body {
-  /* since we are using background-size cover we can avoid using background-repeat:no-repeat 
+  /* since we are using background-size cover we can avoid using background-repeat:no-repeat
   because cover crops the image to fit the container */
   background-size: cover;
   /* for mobile we want to show planet image behind explore button */
@@ -771,8 +797,8 @@ body {
   }
 }
 
-/* ================= 
-    Layout 
+/* =================
+    Layout
 ===================*/
 .grid-container {
   /* border: 1px solid limegreen; */
@@ -784,7 +810,7 @@ body {
   row-gap: 10%; */
   place-items: center;
   padding-inline: 1rem;
-  /* adding padding-bottom in order create some space at the bottom 
+  /* adding padding-bottom in order create some space at the bottom
   other the content touches the bottom of the page*/
   padding-bottom: 4rem;
 }
@@ -809,7 +835,7 @@ body {
 .numbered-title {
   grid-area: title;
 }
-/* destination layout 
+/* destination layout
 all the layout style specific to destination page*/
 .grid-container--destination {
   /* control flow space from here */
@@ -823,6 +849,10 @@ all the layout style specific to destination page*/
 .grid-container--destination > picture {
   grid-area: image;
   max-width: 60%;
+  /* grid items are stretched by default in cross/align axis */
+  /* so to push the image on the top of the grid instead of stretching whole cell cell use align -self start */
+  /* this is not needed because i have already set align-content start in mediaquery 45em grid-container destination class */
+  align-self: start;
 }
 .grid-container--destination > .tab-list {
   grid-area: tabs;
@@ -836,9 +866,9 @@ all the layout style specific to destination page*/
   padding-top: 2.5rem;
   margin-top: 2.5rem;
   /* all the children in the destination-meta inherit text-align center from the grid-container
-  but the contents inside destination meta are not centrally aligned as per the detaination meta container 
+  but the contents inside destination meta are not centrally aligned as per the detaination meta container
   so align-items center solve that issue
-  also destination-meta max-width is 50ch set in .grid-container * due to which its width was not matching the grid-container cell width due to which the 
+  also destination-meta max-width is 50ch set in .grid-container * due to which its width was not matching the grid-container cell width due to which the
   text-align center was not aligning perfectly with the heading text above it solving that issue using align-items center here */
   /* align-items: center; */
 }
@@ -895,7 +925,7 @@ all the layout style specific to destination page*/
     padding-bottom: 0;
   } */
   .grid-container--crew {
-    /* since gric-container-crew is a modification to the grid-container and due to it being cascading ie coming after grid-container 
+    /* since gric-container-crew is a modification to the grid-container and due to it being cascading ie coming after grid-container
     so applying/modifying padding-bottom here will override grid-container padding bottom */
     padding-bottom: 0;
     grid-template-areas:
@@ -944,12 +974,12 @@ all the layout style specific to destination page*/
     padding-bottom: max(6rem, 10vh);
   }
   /* .flex-container {
-    flex-direction: row; 
+    flex-direction: row;
   } */
   .grid-container--destination {
     justify-items: start;
     /* for taller screens (simulate taller screen by making desktop size 50% in chrome responsive mode)
-    due to place-items:center style set in grid-container the all the element/children of grid-container are placed 
+    due to place-items:center style set in grid-container the all the element/children of grid-container are placed
     in the center of their respective cell spaces
     so for taller screen use align-content start to place all the content inside each cell of the grid-container
     to display/arrange them on the top of the cell instead expanding giving all the extra spaces inside each cell due to place-items center` */
@@ -981,9 +1011,15 @@ all the layout style specific to destination page*/
   /* } */
 
   .grid-container--crew {
+    grid-template-columns: minmax(1rem, 1fr) minmax(0, 37rem) minmax(0, 23rem) minmax(
+        1rem,
+        1fr
+      );
+
     /* align-content: end; */
+    /* align all the text to start on the left in main axis of the cell using justify items start */
     justify-items: start;
-    place-items: start;
+    /* place-items: start; */
     grid-template-areas:
       ". title image ."
       ". content image ."
@@ -992,4 +1028,13 @@ all the layout style specific to destination page*/
   /* .grid-container--crew > .dot-indicators {
     justify-self: start;
   } */
+  .grid-container--crew > picture {
+    /* push the image to span till the last column and extend the size of the cell */
+    /* it spans the minmax(2rem,1fr) column as well */
+
+    grid-column: span 2;
+    /* push image to the bottom */
+    align-self: end;
+    max-width: 90%;
+  }
 }
