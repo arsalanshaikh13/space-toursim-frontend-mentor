@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon-32x32.png"
+    />
+
+    <title>Frontend Mentor | Space tourism website</title>
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow&family=Barlow+Condensed&family=Bellefair&display=swap"
+      rel="stylesheet"
+    />
+    <!-- custom css -->
+    <link rel="stylesheet" href="index_retry.css" />
+    <script src="navigation_retry.js" defer></script>
+  </head>
+  <body class="home">
+    <!-- since we want screen reader to avoid reading skip to main content tab use aria-hidden=true -->
+    <a href="#main" class="skip-to-content">Skip to Main Content</a>
+    <header class="primary-header flex">
+      <div>
+        <!-- image stretches as a flex item so keep the image inside the div to not stretch it beyond its aspect-ratio/original size -->
+        <img
+          src="assets/shared/logo.svg"
+          alt="space tourism logo"
+          class="logo"
+        />
+      </div>
+      <button
+        class="mobile-nav-toggle"
+        aria-controls="primary-navigation"
+        aria-expanded="false"
+        data-image="open"
+      >
+        <span class="sr-only">Menu</span>
+      </button>
+      <nav>
+        <!-- https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html
+        https://andy-bell.co.uk/a-modern-css-reset/ -->
+        <ul
+          id="primary-navigation"
+          class="primary-navigation underline-indicators flex ff-sans-cond fs-400 uppercase letter-spacing-2"
+          role="list"
+          data-visible="false"
+        >
+          <li class="active">
+            <!-- to prevent the screen reader from reading numbers in the navigation tabs set aria-hidden to true -->
+            <!-- class=nav-link and aria-pressed is for js code in tab_retry.js -->
+            <a
+              class="nav-link"
+              href="index_retry.html"
+              class="text-accent"
+              aria-pressed="false"
+              ><span aria-hidden="true">00</span>Home</a
+            >
+          </li>
+          <li>
+            <a href="destination.html" class="text-accent">
+              <span aria-hidden="true">01</span>Destination</a
+            >
+          </li>
+          <li>
+            <a href="crew.html" class="text-accent"
+              ><span aria-hidden="true">02</span>Crew</a
+            >
+          </li>
+          <li>
+            <a href="technology.html" class="text-accent"
+              ><span aria-hidden="true">03</span>Technology</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main" class="grid-container grid-container--home">
+      <div class="home-content">
+        <h1 class="ff-sans-cond fs-500 uppercase letter-spacing-1 text-accent">
+          So, you want to travel to
+          <span class="fs-900 d-block ff-serif text-white uppercase"
+            >Space</span
+          >
+        </h1>
+        <p>
+          Let’s face it; if you want to go to space, you might as well genuinely
+          go to outer space and not hover kind of on the edge of it. Well sit
+          back, and relax because we’ll give you a truly out of this world
+          experience!
+        </p>
+      </div>
+      <div>
+        <a
+          id="explore-button"
+          href="destination-titan.html"
+          class="large-button ff-serif fs-500 uppercase bg-white text-dark"
+        >
+          Explore
+        </a>
+      </div>
+    </main>
+
+    <!-- <div class="cta container grid">
+      <div class="box sr-only">a</div>
+      <div class="box">b</div>
+      <div class="box">c</div>
+      <div class="box">d</div>
+    </div> -->
+
+    <!-- <script src="index_retry.js"></script> -->
+  </body>
+</html>

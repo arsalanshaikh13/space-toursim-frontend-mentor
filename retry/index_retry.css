@@ -1,0 +1,1104 @@
+/* inspired by andy bell's reset, josh comeau's reset, kevin powell's resetl */
+/* =================
+    Custom Properties
+===================*/
+:root {
+  /* colors */
+  --clr-dark: 230 35% 7%;
+  --clr-light: 231 77% 90%;
+  --clr-white: 0 0% 100%;
+
+  /* font-sizes */
+  /* px values overwrites the default settings of the browsers
+    and if the user has changed their default settings for font-sizes intheir
+    browsers then px will values will overwrite them and make the site appear different
+    than it should be
+    rem works on the default browser font-size settings so it won't overwrite
+    default/changed browser settings nd make the site appear as designed
+    with things appearing big/small as they were designed in predictable ways */
+  /* rem keeps the proporation of the different components intace even if the user has changed their default browser settings */
+  --fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
+  --fs-800: 3.5rem;
+  --fs-700: 1.75rem;
+  --fs-600: 1.5rem;
+  --fs-500: 1.25rem;
+  --fs-400: 1rem;
+  --fs-300: 0.9375rem;
+  --fs-200: 0.875rem;
+
+  /* font-families */
+  --ff-serif: "Bellefair", serif;
+  --ff-sans-cond: "Barlow Condensed", sans-serif;
+  --ff-sans-normal: "Barlow", sans-serif;
+}
+@media (min-width: 35em) {
+  :root {
+    --fs-800: 5rem;
+    --fs-700: 2.5rem;
+    --fs-600: 1.75rem;
+    --fs-500: 1.25rem;
+    --fs-400: 1rem;
+  }
+}
+@media (min-width: 45em) {
+  :root {
+    --fs-800: 6.25rem;
+    --fs-700: 3.5rem;
+    --fs-600: 2rem;
+    --fs-500: 1.75rem;
+    --fs-400: 1.125rem;
+    --fs-300: 1rem;
+    --fs-200: 0.875rem;
+  }
+}
+
+/* =================
+Css Reset
+===================*/
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+/* use :where to make specificity 0 in order to override these reset values */
+:where(img, figure) {
+  /* img is default inline with alignment at baseline and has that weird gap below it */
+  /* remove the space below image which appears since images are inline by default */
+  display: block;
+  /* shrink images as per screen size but never allow images to grow beyond its original size */
+  max-width: 100%;
+}
+:where(input, textarea, select, button) {
+  /* the elements don't inherit font by default */
+  font: inherit;
+}
+:where(body, h1, h2, h3, h4, h5, h6, p, ul, figure, picture) {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  /* since we have only imported 400-regular font-weight from google
+  so put that on each heading/paragraph as design requires */
+  font-weight: 400;
+}
+/* that removing list bullets with `list-style: none` removes <ul/ol> semantics in VoiceOver.
+Adding zero-width space fixes this; so this is yet another thing to add to our base #CSS files. #a11y  */
+/* https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html
+https://andy-bell.co.uk/a-modern-css-reset/ */
+:where(ul[role="list"]) {
+  list-style: none;
+}
+:where(a) {
+  text-decoration: none;
+}
+
+body {
+  scroll-behavior: smooth;
+  /* since there was layout change in explore button hover due to some overflow issues we can remove scrollbar issues by making overflow hidden */
+  /* overflow: hidden; */
+  /* scrollbar-gutter: stable both-edges; */
+  font-family: var(--ff-sans-normal);
+  font-size: var(--fs-400);
+  /* by default line-height is 1.1/1.2, wcag specification says put line-height: 1.5; for accesibility and better readability reason for users who can't read smaller text*/
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#accessibility_concerns
+  Use a minimum value of 1.5 for line-height for main paragraph content. This will help people experiencing low vision conditions, as well as people with cognitive concerns such as Dyslexia. If the page is zoomed to increase the text size, using a unitless value ensures that the line height will scale proportionately. */
+  line-height: 1.5;
+  background: hsl(var(--clr-dark));
+  color: hsl(var(--clr-white));
+  /* since we want the home page to always cover the entire height every time in every screen the user visits */
+  /* if we set height to 100vh and the content inside is more than then the content overflows out of the body
+  min-height allows for overflowing content inside the body */
+  /* border: 1px solid red; */
+  /* https://stackoverflow.com/questions/65003407/setting-height100vh-vs-min-height100vh */
+  min-height: 100vh;
+  display: grid;
+  /* let the navigation take up only the space required for its contents and the rest of the space is for entire body */
+  grid-template-rows: min-content auto;
+  /* thereis overflow issues in the mobile layout due to navigation */
+  overflow-x: hidden;
+}
+
+/* Remove all animations, transitions  for people that prefer not to see them
+this is important for accessibility reasons because for some people animations make them feel sick and
+they turn off animation in their browser/OS so remove animation from your site for those people who have chosen
+to turn off animation in their website*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =================
+    Utility classes
+===================*/
+.d-block {
+  display: block;
+}
+.flex {
+  display: flex;
+  /* by default gap will be  1rem, but can be change by setting --gap variable */
+  gap: var(--gap, 1rem);
+}
+
+.grid {
+  display: grid;
+  gap: var(--gap, 1rem);
+}
+/* andy bell's flow utility class based on lobotomized owl
+  for setting up spacing among the components
+  only add margin-top on elements after the first element
+  because if we are putting padding on the parent element then parent will alread give space before thefirst element anyway so no need for margin on first element*/
+/* https://andy-bell.co.uk/my-favourite-3-lines-of-css/ */
+/* .flow > * + * {
+    margin-top: 2rem;
+    outline: 1px solid red;
+  } */
+/* * + * does not add specifity while :not() does add same specificity as of class selector so just using :not() will make it difficult to overwrite the selectors in future so use :where(:not()) which makes the specificity to 0 or use :is(:not()) is makes the specificity according to :is(id/class/type) meaning whatever selector inside is() has the highest specificity the specificity of is() will be based on that
+  ex. .card h1,.card h2,.card h3{}
+  instead use .card :where(h1,h2,h3) specicity 0
+  or use .card :is(h1,h2,h3) specificity = type
+  */
+/* check for sanitize css reset */
+.flow > :where(:not(:first-child)) {
+  margin-top: var(--flow-space, 1rem);
+  /* outline: 1px solid red; */
+}
+.flow-space--small {
+  --flow-space: 0.5rem;
+}
+.container {
+  padding-inline: 2rem;
+  max-width: 80rem;
+  margin-inline: auto;
+}
+
+/*for accessibility: to visually hide the element
+screen readers can read the text inside the element but visually it will be hidden
+read out the element to provide context to the listeners about the element*/
+.sr-only {
+  /* can't use display:none to hide elements because it will take the element out of the
+    DOM, this class and properties/style keeps the element inside the DOM and accessible to
+    screen reader while visually hides the element */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* colors */
+.bg-dark {
+  background: hsl(var(--clr-dark));
+}
+.bg-accent {
+  background: hsl(var(--clr-light));
+}
+.bg-white {
+  background: hsl(var(--clr-white));
+}
+.text-dark {
+  color: hsl(var(--clr-dark));
+}
+.text-accent {
+  color: hsl(var(--clr-light));
+}
+.text-white {
+  color: hsl(var(--clr-white));
+}
+.example-component {
+  background: hsl(var(--clr-light) / 0.2);
+}
+#colors p > span {
+  display: inline-block;
+  margin-right: 3rem;
+}
+/* .flex > div {
+    /* expanding each color box equally in the design system */
+/* flex-basis/width: 100%; or instead use flex-grow:1*/
+/* }  */
+/* typography */
+
+.ff-serif {
+  font-family: var(--ff-serif);
+}
+.ff-sans-cond {
+  font-family: var(--ff-sans-cond);
+}
+.ff-sans-normal {
+  font-family: var(--ff-sans-normal);
+}
+
+.letter-spacing-1 {
+  letter-spacing: 4.75px;
+}
+.letter-spacing-2 {
+  letter-spacing: 2.7px;
+}
+.letter-spacing-3 {
+  letter-spacing: 2.35px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.fs-900 {
+  font-size: var(--fs-900);
+}
+.fs-800 {
+  font-size: var(--fs-800);
+}
+.fs-700 {
+  font-size: var(--fs-700);
+}
+.fs-600 {
+  font-size: var(--fs-600);
+}
+.fs-500 {
+  font-size: var(--fs-500);
+}
+.fs-400 {
+  font-size: var(--fs-400);
+}
+.fs-300 {
+  font-size: var(--fs-300);
+}
+.fs-200 {
+  font-size: var(--fs-200);
+}
+
+/* for bigger fontt sizes the lineheight gets to large which make it look ugly so set their line height */
+.fs-900,
+.fs-800,
+.fs-700,
+.fs-600 {
+  line-height: 1.1;
+}
+.numbered-title {
+  text-transform: uppercase;
+
+  font-family: var(--ff-sans-cond);
+  font-size: var(--fs-500);
+  letter-spacing: 4.75px;
+  margin-block: 0.5em;
+}
+.numbered-title > span {
+  color: hsl(var(--clr-white) / 0.25);
+  margin-right: 1rem;
+}
+
+/* header */
+.primary-header {
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  /* doesnt' required 5vw + 1rem here becuase the layout won't be zoomed by the user  */
+  /* 5vw + 1rem is required in typography because viewport units don't zoom and are fixed to the screen size  while rem units zoom when user zooms in on the text  and user generally zoom text to see better  */
+  margin: 1.5rem clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.primary-navigation {
+  --gap: clamp(1.5rem, 5vw, 3rem);
+  /* removing underline-gap ie padding for underline-indicators to make link size grow bigger by adding padding to link/a tag in order to increase the area to click to link for the user for better user experience right now only clicking on the text leads the user to different pages by making link larger by adding padding to the link we can allow the user to click on more area to acess different links in the page */
+  --underline-gap: 0;
+  padding: 0 clamp(1.5rem, 5vw + 1rem, 3rem);
+  background: hsl(var(--clr-dark) / 0.95);
+  color: hsl(var(--clr-light));
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.primary-navigation a {
+  --underline-gap: 2rem;
+  /* and in order to make padding and margin work make a tag to inline block */
+  display: inline-block;
+  padding: var(--underline-gap, 1rem) 0;
+}
+@supports (backdrop-filter: blur(1.5rem)) {
+  .primary-navigation {
+    background: hsl(var(--clr-white) / 0.05);
+    backdrop-filter: blur(1.5rem);
+  }
+}
+/* .primary-navigation a {
+  /* position: absolute; */
+/* font-family: var(--ff-sans-cond);
+  text-decoration: none;
+  white-space: nowrap;
+}  */
+.primary-navigation a > span {
+  margin-right: 0.5em;
+  font-weight: 700;
+}
+
+.mobile-nav-toggle {
+  display: none;
+}
+@media (min-width: 35em) {
+  /* setting up fluid padding for tablets and desktops */
+  .primary-navigation {
+    padding-inline: clamp(1rem, 5vw, 5rem);
+  }
+}
+@media (max-width: 35em) {
+  .primary-navigation {
+    /* transform: translateZ(0); */
+    will-change: transform;
+  }
+  .primary-navigation {
+    /* this gap is for the border bottom as well padding for the list inside primary-navigation */
+    /* for border-bottom the padding has been set to primary-navigation a tag below */
+    /* --underline-gap: 0.5rem; */
+    /* display: block; */
+    /* --gap: 1.5rem; */
+
+    flex-direction: column;
+    padding: min(20vh, 15rem) 2rem;
+
+    position: fixed;
+    /* top: 0;
+    right: 0; */
+    /* bottom: 0; */
+    /* left: 30%; */
+    /* shift the navbar at 30% distance from the left */
+    inset: 0 0 0 30%;
+    /* since the button shows on top of the navbar put the zindex to show navbar on the top of everything */
+    z-index: 1000;
+    /* translate 100% of the size of the navbar to the right */
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 400ms ease-out, opacity 400ms ease;
+    /* animation: slide-out 400ms ease-out; */
+  }
+  @keyframes slide-out {
+    0% {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  .primary-navigation a {
+    --underline-gap: 0.5rem;
+    /* padding line code has already been set above so just change the variable --underline-gap */
+    /* padding: var(--underline-gap, 1rem) 0; */
+  }
+  .primary-navigation[data-visible="true"] {
+    transition: transform 400ms ease-in, opacity 400ms ease;
+    opacity: 1;
+    transform: translateX(0%);
+    /* animation: slidein 400ms ease-in forwards; */
+  }
+  .primary-navigation[data-visible="false"] {
+    /* animation: slide-out 400ms ease-in forwards; */
+  }
+  @keyframes slidein {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+  .primary-navigation.underline-indicators .active {
+    /* revert the applied style on the active navbar menu */
+    border: revert;
+    /* border: 0; */
+  }
+  .primary-navigation a > span {
+    margin-right: 2em;
+  }
+
+  .mobile-nav-toggle {
+    display: block;
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    z-index: 2000;
+  }
+  .mobile-nav-toggle {
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    width: 2rem;
+    height: 2rem;
+    /* background-size: cover; */
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .mobile-nav-toggle[aria-expanded="false"] {
+    background-image: url("assets/shared/icon-hamburger.svg");
+  }
+  .mobile-nav-toggle[aria-expanded="true"] {
+    background-image: url("assets/shared/icon-close.svg");
+  }
+}
+@media (min-width: 35em) and (max-width: 44.999em) {
+  .primary-navigation a > span {
+    display: none;
+  }
+  .primary-navigation {
+    /* this padding values is only for my screen and not based on the design for mutliple devices */
+    padding-inline: 3rem;
+  }
+}
+@media (min-width: 45em) {
+  .primary-navigation {
+    margin-block: 1rem;
+  }
+  /* .primary-header {
+    position: relative;
+  } */
+  .primary-header::after {
+    /* pseudo element appears as the last item of the flex by default due ::after if ::before have been used the it would have been first item in the flexbox */
+    content: "";
+    display: block;
+    /* position relative makes the ::after element part of the DOM structure ie part of the flow */
+    position: relative;
+
+    height: 5px;
+    /* make the ::after element take up the whole width */
+    width: 100%;
+    /* shif the ::after element in order to appear on the top of the nav menus */
+    margin-right: -3rem;
+    background: hsl(var(--clr-white) / 0.15);
+    z-index: 10;
+  }
+  /* shift nav to the last column of the flexbox to make the ::after element appear before nav menus */
+  nav {
+    order: 2;
+  }
+}
+
+.underline-indicators > * {
+  border-bottom: 3px solid hsl(var(--clr-white) / 0);
+  /* unnerline-gape for forprimary navigation has been set to 0 above and that padding has been shifted to link/primary-navigation a tag to allow for more  space to click to navigate to different links/pages on the site */
+  padding: var(--underline-gap, 1rem) 0;
+  cursor: pointer;
+  transition: border 0.5s ease;
+}
+
+.underline-indicators a {
+  /* display: inline-block; */
+}
+.underline-indicators > *:hover,
+.underline-indicators > *:focus {
+  border-color: hsl(var(--clr-white) / 0.5);
+}
+.underline-indicators .active > a,
+.underline-indicators [aria-selected="true"] {
+  color: hsl(var(--clr-white));
+  border-color: hsl(var(--clr-white));
+}
+
+.underline-indicators .active {
+  border-color: hsl(var(--clr-white));
+}
+
+.dot-indicators > * {
+  cursor: pointer;
+  padding: 0 0.5em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 0;
+  background: hsl(var(--clr-white) / 0.25);
+}
+.dot-indicators > *:hover,
+.dot-indicators > *:focus {
+  background: hsl(var(--clr-white) / 0.5);
+}
+.dot-indicators > [aria-selected="true"] {
+  background: hsl(var(--clr-white));
+}
+.numbered-indicators > * {
+  cursor: pointer;
+  /* display: block; */
+  /* all the child elements of the numbered-indicators are buttons and in reset i have set buttons font:inherit so it inherits the font-sizes of the parent */
+  padding: 0 1em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  /* display: grid;
+  place-items: center; */
+  background: hsl(var(--clr-dark));
+  color: hsl(var(--clr-white));
+  border: 1px solid hsl(var(--clr-white) / 0.25);
+}
+.numbered-indicators > *:hover,
+.numbered-indicators > *:focus {
+  border-color: hsl(var(--clr-white));
+}
+.numbered-indicators > [aria-selected="true"] {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+}
+/* button */
+.home-content {
+  /* transform: translateX(-200%); */
+  animation: slidein 400ms ease;
+}
+.large-button {
+  /* transform: translateX(200%); */
+  animation: slidein 400ms ease;
+  /* remove default border from the button */
+  border: 0;
+  /* font size is consisitent across all the media queries */
+  font-size: 2rem;
+  /* since the links are inline by default they get squished to the size of the content text by default
+  and grid displayon on grid-container make the button's parent  div display block which covers the entire width
+   so make the links inline-grid so that the parent div doesn't take up the whole width by default and also make the link adjust to specification of the grid and retain its aspect ratio */
+  display: inline-grid;
+  /* align the text to the center of the button */
+  place-items: center;
+  padding: 0 2em;
+  /* instead of setting seperate width/height use aspect ratio to make perfect square button */
+  aspect-ratio: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  /* we are position after pseudo element as absolute */
+  position: relative;
+  /* create stacking context for large-button and its children pseudo elements */
+  z-index: 1;
+  /* isolation: isolate; */
+}
+.large-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* cover entire button area */
+  width: 100%;
+  height: 100%;
+  background: hsl(var(--clr-white) / 0.15);
+  opacity: 0;
+  border-radius: 50%;
+  /* without stacking context on button the after pseudo element goes below the button
+  after stacking context bg goes below text */
+  z-index: -1;
+  transition: transform 0.75s ease-in-out, opacity 0.5s linear;
+}
+.large-button:hover::after,
+/*when the button is clicked the hover transition stays until the user clicks somewhere else on the web page
+due to applying effects on focus as well below unlike in hover where even if the user clicks on the button and then hovers away the transition stops*/
+
+.large-button:focus::after {
+  opacity: 1;
+  /* always avoid height/width for animations/transition because their animation is computationally expensive and difficult to accurately render during animation
+  instead use scale/translate which are computationally cheapr and easeier/accurately render */
+  transform: scale(1.5);
+}
+
+/* =================
+Page specific background
+===================*/
+.home,
+.destination,
+.crew {
+  /* no need for background repeat no repeat since background size cover crops the image to fit the image as per the container/screen/element size */
+  background-size: cover;
+  /* the earth image is too much at the bottom and we want to lift/bring the earth image behind the explore buttton  and since the screen size is min-width 100vh the image bottom will be match with explore button*/
+  background-position: bottom center;
+}
+.home {
+  background-image: url("assets/home/background-home-mobile.jpg");
+}
+.destination {
+  background-image: url("assets/destination/background-destination-mobile.jpg");
+}
+.crew {
+  background-image: url("assets/crew/background-crew-mobile.jpg");
+}
+.technology {
+  background-image: url("assets/technology/background-technology-mobile.jpg");
+}
+/* for tablets  */
+@media (min-width: 35em) {
+  .home {
+    background-position: center center;
+    background-image: url("assets/home/background-home-tablet.jpg");
+  }
+  .destination {
+    background-position: center center;
+    background-image: url("assets/destination/background-destination-tablet.jpg");
+  }
+  .crew {
+    background-position: center center;
+    background-image: url("assets/crew/background-crew-tablet.jpg");
+  }
+  .technology {
+    background-position: center center;
+    background-image: url("assets/technology/background-technology-tablet.jpg");
+  }
+}
+@media (min-width: 45em) {
+  .home {
+    background-image: url("assets/home/background-home-desktop.jpg");
+  }
+  .destination {
+    background-image: url("assets/destination/background-destination-desktop.jpg");
+  }
+  .crew {
+    background-image: url("assets/crew/background-crew-desktop.jpg");
+  }
+  .technology {
+    background-image: url("assets/technology/background-technology-desktop.jpg");
+  }
+}
+
+/* =================
+   skip to main content 
+===================*/
+
+/* since .skip-to-content is child of body which has display grid with first row set to min-content and next rows to auto
+.skip-to-content despite being display inline block takes up whole width due to it being child of body which is grid container
+so take out the .skip-to-content from the flow of the body/page using position absolute */
+.skip-to-content {
+  /* take out skip-to-content from the flow of the body */
+  position: absolute;
+  text-decoration: underline;
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  padding: 0.5em 1em;
+  /* https://stackoverflow.com/questions/9998260/css-absolute-position-wont-work-with-margin-leftauto-margin-right-auto */
+  /* in order to make margin-inline auto to work we need to set up width on the element and set left 0 and right 0 for absolute position elements so position absolute takes up whole screen width and we can position element using margin-inline auto */
+  left: 0;
+  right: 0;
+  /* 30% width of screen due left 0 and right 0 */
+  /* width: 30%; */
+  /* restrict the width to content size + padding only instead of taking % of screen size */
+  width: max-content;
+  margin-inline: auto;
+  z-index: 9999;
+  /* transaltey(-100%) will move the skip to content away(100% means 100% of y distance/height of skip-to-content element)  from the visible page */
+  transform: translateY(-100%);
+  transition: transform 0.4s ease;
+}
+.skip-to-content:focus {
+  transform: translateY(0%);
+}
+/* =================
+   layout
+===================*/
+
+.grid-container {
+  animation: show 0.4s ease;
+
+  /* border: 1px solid red; */
+  display: grid;
+  /* for mobile/tablet layouts */
+  text-align: center;
+  /* place-items redistributes the space around the elements/ place-contents will the stick the elements together one below other */
+  place-items: center;
+  padding-inline: 1rem;
+  padding-bottom: 6rem;
+}
+
+/* set the max-width on the paragraph to not for better readability */
+/* .grid-container * { */
+.grid-container p:not([class]) {
+  /* border: 1px solid red; */
+  max-width: 50ch;
+  /* outline: 2px solid limegreen; */
+}
+/* .numbered-title repeats in all the pages and have same grid-area so no need to add more specificity to it */
+.numbered-title {
+  grid-area: title;
+  margin-top: 2rem;
+}
+
+/* destination page */
+.grid-container--destination {
+  /* since in grid-container we have place-items center all the child elements of grid-container--destaination are spread in the vertical space(in align-items the elements stretch the vertical distance by default) of the page
+  in order to control the spacing between the element using flow class first make all child elements of gridcontainer to align at the top of their cells  and not stretch as they do by default for align-items/align-content*/
+  align-content: start;
+  /* control the spacing between the elements using flow class and flow-space variable */
+  --flow-space: 2rem;
+  /* use grid-template areas to control the placement of the child elements for grid-container destination */
+  grid-template-areas:
+    "title"
+    "image"
+    "tab"
+    "content";
+}
+
+.grid-container--destination > picture {
+  max-width: 60%;
+  grid-area: image;
+  align-self: start;
+}
+.grid-container--destination > .tab-list {
+  grid-area: tab;
+}
+.grid-container--destination > .destination-info {
+  grid-area: content;
+  --flow-space: 1rem;
+}
+
+.destination-meta {
+  flex-direction: column;
+  /* there is a border between .destination meta and abover paragraph with spaces separating between them with border in the middle so we can achieve that configuration using first paddingtop and then border and then margintop */
+  border-top: 1px solid hsl(var(--clr-white) / 0.15);
+  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+}
+/* since the font-size remains same across all the devices screen so hard code the font size */
+.destination-meta p {
+  font-size: 1.75rem;
+}
+/* .destination-meta > * { */
+/* the problem of centering the text is solved by by fixing grid-container * to grid-container p:not([class]) */
+/* grid-container has already set text-align to center so no need for this code because previous due to max-width beign applied to this div due grid-container * prevented it from taking up the whole width which is why text-align center was different for h3 and p in this div and which required setting align-self to center for this div to center the text inside this div */
+/* align-self: center; */
+/* } */
+
+/* crew page */
+.grid-container--crew {
+  --flow-space: 2rem;
+  /* align-items: start; */
+  /* since we don't the content to be pushed to top use align content
+  since all the cells are placed on top of each other we can't manipulate align-items ie cells be cells sizes are fixed here due to being lined up on top of each other */
+  /* align-content: start; */
+  grid-template-areas:
+    "title"
+    "image"
+    "tab"
+    "content";
+}
+.grid-container--crew > .crew-details {
+  grid-area: content;
+}
+.crew-details h2 {
+  color: hsl(var(--clr-white) / 0.5);
+}
+.grid-container--crew > .dot-indicators {
+  grid-area: tab;
+}
+.grid-container--crew > picture {
+  grid-area: image;
+  max-width: 60%;
+  /* push the image on the bottom of the screen 
+  remove padding bottom from grid container using modifier grid-container--crew*/
+  /* align-self: end; */
+}
+
+/* technology layout */
+.grid-container--technology {
+  animation: show 0.4s ease forwards;
+
+  /* since we want to stretch the image to cover the full width of the screen first remove the padding inline from grid-container and simulate the padding using grid-template columns in that way we can get the paddding inline space as well opportunity to span the image across all the columns which makes the image stretch the whole width of the screen and other contents get their padding inline space asa well */
+  padding-inline: 0;
+  /* 1rem simultate padding inline and rest the space in the middel is auto which stretches the contents sizes as per changing screen width */
+  grid-template-columns: 1rem auto 1rem;
+  grid-template-areas:
+    ". title ."
+    ". image ."
+    ". tab ."
+    ". content .";
+  /* bring all the content inside grid-cells to the top of their cells and manipulate the space between the cell and therefore content using flow-space because place-items:center in grid-container distributes the content across the screen height and we are not able to manipulate the spaces between the content */
+  /* align-content start pushes the content to the top of the cell and also makes the size of grid-cell min-content thereby shrinking the sizes of the scale and thus giving us more opportunity control the space between the cells  using flow-space ie margin-top/margin*/
+  /* align-content shrinks to min-content size the cell size on start and end while pushging the content to start or end of the cell 
+  whereas align-items keep the cell size intact and only shifts the contents/text inside the cell to start or end*/
+  align-content: start;
+  /* align-items:start it pushes the content to the top of the cells but keeps the size of the individual cells intact there spreading the contents on the page more and don't give the opportunity to control/manipulate the space between the cells  */
+  --flow-space: 2rem;
+}
+.grid-container--technology > picture {
+  grid-area: image;
+  /* span the image across 3 columns to stretch the image across the whole width of the screen */
+  grid-column: span 3;
+  /* animation: show 0.4s ease forwards; */
+}
+/* there are 2 different images for differen screens so remove the portrait image from the smaller by removing them away from the layout itself as the portrait image can't underlap landscape image  in order for keeping them in the layout and bring them back through opacity visibility animation*/
+.grid-container--technology > picture > .portrait-image {
+  display: none;
+
+  /* transform: scale(0) translateX(200%); */
+}
+.grid-container--technology > .numbered-indicators {
+  grid-area: tab;
+  --gap: 1.5rem;
+}
+.grid-container--technology > .technology-info {
+  grid-area: content;
+}
+
+/* tried animation on separate components here */
+/* .grid-container--technology > .numbered-indicators {
+  animation: show 0.4s ease;
+}
+.grid-container--technology > .technology-info {
+  animation: show 0.4s ease;
+} */
+/* .grid-container--technology > picture > .portrait-image { */
+/* display: none; */
+/* opacity: 0;
+  transform: scale(0); */
+/* animation: show 0.4s ease; */
+/* } */
+/* .grid-container--technology > picture > .landscape-image { */
+/* display: block; */
+/* opacity: 0;
+  transform: scale(0); */
+/* animation: show 0.4s ease; */
+/* } */
+
+/* .grid-container--technology > picture > .portrait-image { */
+/* display: none; */
+/* can't put display none in animation because animation creates its own composite layer and image goes to display none in that composite layer but
+  ni the website the space alloted to the image remains intact  so the lanscape image despite being hidden still occupies space and even if i use translate to hide the image the space alloted for landscape image will still be their and will affect the layout and placements of other compoenents as well */
+/* animation: hide 0.4s ease both; */
+/* we can use javascript settimeout/setinterval function to delay picture display to none here
+  but still for a time a being landscape image will still occupy some real estate in the layout */
+/* display: none; */
+/* } */
+
+@media (min-width: 35em) {
+  .numbered-title {
+    justify-self: left;
+  }
+  .destination-meta {
+    /* adjust the flex-gap according to screen size */
+    --gap: min(8vw, 6rem);
+    flex-direction: row;
+    justify-content: center;
+  }
+  .grid-container--crew {
+    /* justify-items: left; */
+    /* remove bottom padding to push the image to the bottom of the screen */
+    padding-bottom: 0;
+    grid-template-areas:
+      "title"
+      "content"
+      "tab"
+      "image";
+  }
+  .grid-container--crew > picture {
+    align-self: end;
+  }
+}
+@media (min-width: 45em) {
+  .grid-container {
+    /* max-width: 80%;
+    margin-inline: auto; */
+    text-align: left;
+    /* column-gap: (var(--container-gap, 2rem)); */
+
+    /* grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 40rem)) minmax(
+        2rem,
+        1fr
+      ); */
+    grid-template-columns: minmax(2rem, 1fr) minmax(0, 40rem) minmax(0, 20rem) minmax(
+        2rem,
+        1fr
+      );
+  }
+  /* this specific column arrangement only pertains to home page to divide content and explore button in 2 columns as per design and give them space accordingly
+  for all other pages we are using grid-template areas to allocate space for grid child elements */
+  .grid-container--home > *:first-child {
+    grid-column: 2;
+    /* padding: 0; */
+  }
+  .grid-container--home > *:last-child {
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  /* push the content towards the bottom of the screen as per design using align-items end */
+  .grid-container--home {
+    align-items: end;
+    padding-bottom: max(6rem, 20vh);
+  }
+
+  .grid-container--destination {
+    /* grid template columsn is minmax() repeat() minmax() accommodating free space and contents putting contents in the middle 
+    so in grid template areas representing free space by '.' and putting contents in the middle  and then empty space '.' */
+    grid-template-areas:
+      ". title title ."
+      ". image tab ."
+      ". image content .";
+    /* aling the all text to the left 
+    since we are manipulating child text orientatino from parent 
+    we need to use justify items instead of justify content because contents are not spanning the whole width of the cell */
+    /* push the whole child cell to the left instead of text/content to the left  */
+    justify-items: start;
+    /* align-items: start; */
+    text-align: left;
+  }
+  .grid-container--destination > picture {
+    max-width: 90%;
+    /* since we are using place-items center in grid-container which is making the picture to align-self to center and in taller screen the image appears to short for the side contents so push the image to the top to instead of making picture cell of grid container stretch the whole height */
+    align-self: start;
+  }
+  .grid-container--destination .destination-meta {
+    /* since destination-meta is flex box and we want to move the contents inside the flex and destination-meta being the parent/container use justify content to alignt the contents to the left */
+    justify-content: flex-start;
+    /* outline: 2px solid red; */
+  }
+
+  .grid-container--crew {
+    /* justify-items: start; */
+    /* align-items: start; */
+    /* we can adjust row sizes also to adjust the content but it won't span the entire height 
+    and figma design is for very large screen for which this the grid-template-columns part is sufficient to keep */
+    /* grid-template-rows: min-content min-content min-content; */
+    grid-template-columns: minmax(2rem, 1fr) minmax(0, 37rem) minmax(0, 23rem) minmax(
+        2rem,
+        1fr
+      );
+    justify-items: start;
+    grid-template-areas:
+      ". title title ."
+      ". content image ."
+      ". tab image .";
+  }
+  .grid-container--crew > .dot-indicators {
+    justify-self: start;
+    /* align-self: start; */
+  }
+  .grid-container--crew > picture {
+    /* span the picture column across the last column as well to increase space available to stretch the image more  */
+    /* it spans the minmax(2rem,1fr) column as well */
+    grid-column: span 2;
+    /* max-width 100% on image is causing overflowing in height
+    max-width 100% is required for taller screens to show considerable image size on website */
+    max-width: 100%;
+    align-self: end;
+    justify-self: end;
+    /* trying to make crew image to overlap each other at the same place in order for them to occupy the same spot in the layout */
+    /* overflow-y: hidden; */
+    /* height: 80vh; */
+    /* display: grid;
+    grid-template-rows: repeat(1, 1fr);
+    isolation: isolate; */
+  }
+  .grid-container--technology {
+    animation: show 0.4s ease forwards;
+
+    justify-items: start;
+    grid-template-columns:
+      minmax(2rem, 0.5fr) minmax(0, 7.5rem) minmax(0, 1.8fr) minmax(0, 0.2fr) minmax(
+        0,
+        10rem
+      )
+      minmax(2rem, 1fr);
+    /* gap: 2rem; */
+    grid-template-areas:
+      ". title title title title ."
+      ". tab content . image .";
+  }
+  .grid-container--technology > picture {
+    /* only want to span the picture across last two columns only */
+    grid-column: 5 / span 2;
+    justify-self: end;
+  }
+  .grid-container--technology > .numbered-indicators {
+    justify-self: start;
+    flex-direction: column;
+
+    animation: show 0.4s ease;
+  }
+  .grid-container--technology > .technology-info {
+    animation: show 0.4s ease;
+  }
+  .grid-container--technology > picture > .portrait-image {
+    display: block;
+    /* opacity: 0;
+    transform: scale(0); */
+    animation: show 0.4s ease forwards;
+  }
+
+  .grid-container--technology > picture > .landscape-image {
+    /* display: none; */
+    /* can't put display none in animation because animation creates its own composite layer and image goes to display none in that composite layer but
+    ni the website the space alloted to the image remains intact  so the lanscape image despite being hidden still occupies space and even if i use translate to hide the image the space alloted for landscape image will still be their and will affect the layout and placements of other compoenents as well */
+    animation: hide 0.4s ease forwards;
+    /* we can use javascript settimeout/setinterval function to delay picture display to none here
+    but still for a time a being landscape image will still occupy some real estate in the layout */
+    display: none;
+  }
+}
+
+/* unfortunately for crew page the images are not overlapping like in destination page so we need to remove the image from the layout completely for crew page by keeping the same attribute but increasing specificity */
+.grid-container--crew [data-hidden="true"],
+.grid-container--technology [data-hidden="true"] {
+  display: none;
+}
+.grid-container--crew [data-hidden="false"],
+.grid-container--technology [data-hidden="false"] {
+  display: block;
+  animation: show 0.4s forwards;
+}
+
+[data-hidden="true"] {
+  /* display: none; */
+  visibility: hidden;
+  /* transform: translate(500%); */
+  /* visibility prevents the element any access to pointerevents like click or keyboard event like tab */
+  /* but visibility causes repaing of the elements  */
+
+  /* opacity doesnot causes repainting of the elements */
+  opacity: 0;
+  /* prevent pointerevents access to element */
+  /* pointer-events: none; */
+  transition: visibility 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+[data-hidden="false"] {
+  /* display: block; */
+  visibility: visible;
+  opacity: 1;
+  /* transform: translate(50%); */
+  /* pointer-events: visible; */
+  transition: visibility 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+[hidden] {
+  display: none;
+}
+
+/* animation to show the content */
+@keyframes show {
+  from {
+    opacity: 0;
+    /* transform: scale(0); */
+  }
+  to {
+    opacity: 1;
+    /* transform: scale(1); */
+  }
+}
+/* animation to hide the content */
+@keyframes hide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+    /* can't put display none here because  the component is in a separate composite layer right due to being in animation and transform and opacity so even if i make display none the image will disappear in the composite layer instead of actuall website layer */
+    /* display: none;
+
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap; */
+  }
+}
