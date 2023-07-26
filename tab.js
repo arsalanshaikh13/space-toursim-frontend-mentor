@@ -2,8 +2,8 @@
 const tabList = document.querySelector('[role="tablist"]');
 // select all the tabs in the tablist in an array
 const tab = tabList.querySelectorAll('[role="tab"]');
-const content = document.querySelectorAll(".destination-info");
-const picture = document.querySelectorAll("picture");
+// const content = document.querySelectorAll(".destination-info");
+// const picture = document.querySelectorAll("picture");
 
 // listen for keyboard even and execute the callback functionk
 // tabList.addEventListener("keydown", (e) => {

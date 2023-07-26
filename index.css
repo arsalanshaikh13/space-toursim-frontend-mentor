@@ -33,9 +33,11 @@
   :root {
     --fs-800: 5rem;
     --fs-700: 2.5rem;
-    --fs-600: 1.5rem;
+    --fs-600: 1.75rem;
     --fs-500: 1.25rem;
     --fs-400: 1rem;
+    /* setting/changing this value only for h2 tag in article header of technology page */
+    --fs-200: 0.875rem;
   }
 }
 @media (min-width: 45em) {
@@ -489,7 +491,7 @@ so take out the .skip-to-content from the flow of the body/page using position a
 .primary-navigation {
   --gap: clamp(1.5rem, 5vw, 3rem);
   /* this allows to set the padding on the tabs and push the border-bottom and this variable gives more control to change the padding for different compoents by overwriting this variable in descendant classes/elements */
-  --underline-gap: 2rem;
+  --underline-gap: 0;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -502,6 +504,13 @@ so take out the .skip-to-content from the flow of the body/page using position a
   font-family: var(--ff-sans-cond);
   text-decoration: none;
   white-space: nowrap;
+  /* since the navigation link was only workign when user clicked on the text and not on the surrounding space
+  and inorder to make surrounding space around text also interactive and able to help user navigate to different pages
+  first set the underline-gap on primary navigation to 0 and then again set underline gap here so a tag gets bigger in size and 
+  border is again pushed 2rem below a tag and the other design element/styles are not affected by these changes */
+  --underline-gap: 2rem;
+  display: inline-block;
+  padding: var(--underline-gap, 1rem) 0;
 }
 .primary-navigation a > span {
   margin-right: 0.5em;
@@ -536,7 +545,9 @@ so take out the .skip-to-content from the flow of the body/page using position a
   } */
   .primary-navigation {
     /* this allows to set the padding on the tabs and push the border-bottom and this variable gives more control to change the padding for different compoents by overwriting this variable in descendant classes/elements */
-    --underline-gap: 0.5rem;
+    /* setting underline -gap on a tag below ie .primary-navigation a {} below 
+    setting padding specifically on links in order to allow the surround space around links ie a tag to be used by the user to navigate to different pages instead of previous user had to just clikc on the text to navigate*/
+    /* --underline-gap: 0.5rem; */
     flex-direction: column;
     position: fixed;
     /* top: 0;
@@ -555,6 +566,11 @@ so take out the .skip-to-content from the flow of the body/page using position a
     /* left: 100%; */
     /* transform: translateX(100%);
     transition: transform 0.5s ease-in-out; */
+  }
+  .primary-navigation a {
+    /* since we are setting setting padding on links ie a tag instead of on the li tag ie underline-indicator class element
+    so instead resettting underline-gap above for mobile set underline gap on here on link tag ie a tag */
+    --underline-gap: 0.5rem;
   }
 
   /* .primary-navigation.open {
@@ -707,16 +723,34 @@ browsers to render older html instead of Modern HTML and CSS and that's why *:ho
 .number-indicators > * {
   --flow-space: 1rem;
   font: inherit;
-  display: grid;
-  place-content: center;
+  /* font-size: 24px; */
+  /* since we are using height no need for setting display grid to center the text because text will center as text align center is set on the grid-container/or some other parent/ancestor of number-indicators */
+  /* display: grid; */
+  /* place-content: center; */
   cursor: pointer;
   border: 0;
+  /* line-height: 1.5; */
   border-radius: 50%;
   /* width: 0.75em;
   height: 0.75em; */
   /* making a perfect square without setting width & height */
   aspect-ratio: 1/1;
-  padding: 1em;
+  /* width: 55px; */
+  /* actually that weird issued was due to me setting flow class on numbered-indicators(flow-space pushed the other buttons down due to having margin-top on them and the first button was then stretching the whole height in chrome and in firefox it was rising up by default and when i applied align-items:flex-start only the first item was changed and rest others were pushed down due to having margin-top/flow-space on them)
+   which was solved by removing the flow class and setting the space between numbered tabs using flex-gap
+  the solution is in index_retry.css so there is no weird issue between chrome and firefox and we can set button height and width using em and rem units for padding and then using aspect ratio to get perfect 
+  no need to set specific height on the buttons height/width can be adjusted using font-sizes and padding
+  different size of number "1" was due to width of number "1" being less than other digits and this is consistent across all the browswer and no issues with that as well 
+  when we set font-sizes the space alloted to fonts are the same for all the digits andletters 
+  i had the issues in the morning due to my mind not being in the right place and  */
+  /* there is some weird issues in chrome and firefox
+  chrome: when using padding and aspect ratio chrome browser stretches the buttons by default(with or without flexbox setting)
+  firefox: for number "1" the content size in layout in dev tool for both chrome and firefox shows 7.5 pixels and for other number they shouw 11.5 pixels which is the button size for number "1" is smaller than other digits buttons sizes */
+  /* due to font-size issues and padding issues the buttons can't be uniformly aligned acrros chrome and firefox without hardcoding height values */
+  height: clamp(3.5rem, 8vw + 1rem, 4rem);
+  /* padding: 1em; */
+  /* padding: 1.5rem; */
+  /* padding: 1em 1em; */
   color: hsl(var(--clr-white) / 1);
   background-color: hsl(var(--clr-dark) / 0.15);
   border: 1px solid hsl(var(--clr-white) / 0.25);
@@ -730,6 +764,9 @@ browsers to render older html instead of Modern HTML and CSS and that's why *:ho
 .number-indicators > [aria-selected="true"] {
   color: hsl(var(--clr-dark));
   background: hsl(var(--clr-white) / 1);
+}
+.number-indicators > * > span {
+  pointer-events: auto;
 }
 
 /* =================
@@ -794,6 +831,24 @@ body {
 @media (min-width: 45em) {
   .crew {
     background-image: url(./assets/crew/background-crew-desktop.jpg);
+  }
+}
+/* technology */
+.technology {
+  background-image: url(./assets/technology/background-technology-mobile.jpg);
+}
+
+@media (min-width: 35em) {
+  .technology {
+    /* to make the text more readable in tables change the background position of the image to push it down of the text */
+    background-position: center center;
+    background-image: url(./assets/technology/background-technology-tablet.jpg);
+  }
+}
+
+@media (min-width: 45em) {
+  .technology {
+    background-image: url(./assets/technology/background-technology-desktop.jpg);
   }
 }
 
@@ -900,6 +955,97 @@ all the layout style specific to destination page*/
   /* opacity: 0.5; */
   color: hsl(var(--clr-white) / 0.5);
 }
+
+/* technology layout */
+.grid-container--technology {
+  --flow-space: 2rem;
+  /* since we want the image to stretch the whole screen width first make padding inline 0 and then simulate padding using grid template columns */
+  padding-inline: 0;
+  align-content: start;
+  /* grid-template-rows: min-content; */
+  /* since we are making padding inline to 0 in grid-container technology we need to simulate padding inline in the grid-container-technology using grid-template-columsn 1rem auto 1rem to accomodate space to avoid contents touching the edge of the screen
+  unless it is an image which we want it to stretch the whole screen width so we can span the whole image using grid-template areas */
+  /* using grid-template-columns and grid-template area we can stretch the image across tablets and mobile devices easily */
+  grid-template-columns: 1rem auto 1rem;
+  grid-template-areas:
+    ". title ."
+    "image image image "
+    ". tab ."
+    ". content .";
+  /* border: 5px solid blanchedalmond; */
+}
+.grid-container--technology > picture {
+  /* position: relative;
+  left: 0; */
+  /* right: -1rem; */
+  /* top: 0;
+  bottom: 0; */
+  /* margin-right: -2rem;
+  margin-left: -4rem; */
+  /* width: auto; */
+  /* we can stretch image using scale but on smaller screen we need to adjust scale value which makes the solution not so robust and applicable for different screens  */
+  /* transform: scale(110%); */
+  /* grid-column: 1 / span 3; */
+  grid-area: image;
+  /* margin-left: -20%;
+  margin-right: -20%; */
+  /* outline: 2px solid lime; */
+}
+/* https://stackoverflow.com/questions/27853884/media-queries-and-image-swapping */
+.grid-container--technology > picture > .image-portrait {
+  display: none;
+  /* transform: translate(500%); */
+}
+.grid-container--technology > .number-indicators {
+  grid-area: tab;
+  --gap: 2rem;
+  /* width: 100%; */
+  /* height: min-content; */
+  /* padding-block: 1rem; */
+  /* border: 2px solid red; */
+  /* align-items: stretch; */
+  /* align-content: center; */
+  /* justify-self: start; */
+  /* align-self: end; */
+}
+
+/* .number-indicators > * { */
+/* align-self: flex-start;
+  justify-self: flex-start; */
+/* aspect-ratio: 1; */
+/* display: grid;
+  place-content: center; */
+/* } */
+.grid-container--technology > .technology-info {
+  grid-area: content;
+  /* apparently putting flow-space here will change the flow-space for article technology info in its parent ie main container instead of  */
+  /* since we  are putting .flow class in main and also in article and also in header tab below article tag */
+  /* putting flow-space here change flow-space value for article tag as well as the children of article tag */
+  /* --flow-space: 1rem; */
+}
+.technology-info > header {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: flex-start; */
+  /* outline: 2px solid red; */
+  /* in design for mobile screen the text align is left for content inside header */
+  /* .technology-info header stretches whole screen width by default so first reduce the stretch by setting display to inline-block and then internally align text to left in order to scope the text align left to locally within header tag */
+  display: inline-block;
+  text-align: left;
+}
+.technology-info > header > h2 {
+  /* --flow-space: 0.5rem; */
+  font-size: var(--fs-400);
+}
+.technology-info > p {
+  /* changing flow space value  here to only change the flow space value of paragraph tag inside article .technology info container */
+  --flow-space: 1rem;
+  color: hsl(var(--clr-light));
+}
+
+.technology-info > header p {
+  font-size: var(--fs-600);
+}
 @media (min-width: 35em) {
   /* .grid-container--destination > .numbered-title,
   .grid-container--crew > .numbered-title { */
@@ -908,6 +1054,7 @@ all the layout style specific to destination page*/
     /* text-align: left; */
     /* place-self: left; */
     /* border: 1px solid red; */
+    /* setting justify self start automattically sets the title to the left for all the pages that use numbered title */
     justify-self: start;
     /* another way to text align left*/
     /* display: block;
@@ -944,6 +1091,14 @@ all the layout style specific to destination page*/
     justify-self: start;
     margin-top: 2rem;
   } */
+  .technology-info > header {
+    text-align: center;
+  }
+
+  .technology-info > header > h2 {
+    /* --flow-space: 0.5rem; */
+    font-size: var(--fs-200);
+  }
 }
 
 /* around 45rem tablets get maxed out and so move into desktop layout post 45rem */
@@ -951,8 +1106,8 @@ all the layout style specific to destination page*/
   .grid-container {
     text-align: left;
     column-gap: var(--container-gap, 2rem);
-    grid-template-columns: minmax(1rem, 1fr) repeat(2, minmax(0, 30rem)) minmax(
-        1rem,
+    grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 30rem)) minmax(
+        2rem,
         1fr
       );
   }
@@ -966,6 +1121,7 @@ all the layout style specific to destination page*/
   }
   .grid-container--home > *:last-child {
     grid-column: 3;
+    justify-self: end;
     /* outline: 1px solid yellow; */
   }
   .grid-container--home {
@@ -1036,5 +1192,35 @@ all the layout style specific to destination page*/
     /* push image to the bottom */
     align-self: end;
     max-width: 90%;
+  }
+
+  .grid-container--technology {
+    grid-template-rows: min-content auto;
+    grid-template-columns:
+      minmax(2rem, 1fr) minmax(0, 5rem) minmax(0, 29rem) minmax(0, 15rem)
+      minmax(2rem, 1fr);
+    grid-template-areas:
+      ". title title title ."
+      ". tab content image .";
+  }
+  .grid-container--technology > .number-indicators {
+    flex-direction: column;
+  }
+  .grid-container--technology > picture {
+    grid-column: span 2;
+    aspect-ratio: 1/1;
+    /* since we are spaning the picture cell across last 2columns to allow for more width size for picture
+    we need to push the image to left edge of the screen as per design so always keep the image to left edge of grid cell using justify self end */
+    justify-self: end;
+  }
+  /* https://stackoverflow.com/questions/27853884/media-queries-and-image-swapping */
+  .grid-container--technology > picture > .image-portrait {
+    display: block;
+  }
+  .grid-container--technology > picture > .image-landscape {
+    display: none;
+  }
+  .technology-info > header {
+    text-align: left;
   }
 }
