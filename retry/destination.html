@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon-32x32.png"
+    />
+
+    <title>Frontend Mentor | Space tourism website</title>
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow&family=Barlow+Condensed&family=Bellefair&display=swap"
+      rel="stylesheet"
+    />
+    <!-- custom css -->
+    <link rel="stylesheet" href="index_retry.css" />
+    <script src="navigation_retry.js" defer></script>
+    <script src="tab_retry.js" defer></script>
+  </head>
+  <body class="destination">
+    <!-- since we want screen reader to avoid reading skip to main content tab use aria-hidden=true -->
+    <a href="#main" class="skip-to-content">Skip to Main Content</a>
+    <header class="primary-header flex">
+      <div>
+        <!-- image stretches as a flex item so keep the image inside the div to not stretch it beyond its aspect-ratio/original size -->
+        <img
+          src="assets/shared/logo.svg"
+          alt="space tourism logo"
+          class="logo"
+        />
+      </div>
+      <button
+        class="mobile-nav-toggle"
+        aria-controls="primary-navigation"
+        aria-expanded="false"
+        data-image="open"
+      >
+        <span class="sr-only">Menu</span>
+      </button>
+      <nav>
+        <!-- https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html
+        https://andy-bell.co.uk/a-modern-css-reset/ -->
+        <ul
+          id="primary-navigation"
+          class="primary-navigation underline-indicators flex ff-sans-cond fs-400 uppercase letter-spacing-2"
+          role="list"
+          data-visible="false"
+        >
+          <li>
+            <!-- to prevent the screen reader from reading numbers in the navigation tabs set aria-hidden to true -->
+            <a href="index_retry.html" class="text-accent"
+              ><span aria-hidden="true">00</span>Home</a
+            >
+          </li>
+          <li class="active">
+            <a href="destination.html" class="text-accent">
+              <span aria-hidden="true">01</span>Destination</a
+            >
+          </li>
+          <li>
+            <a href="crew.html" class="text-accent"
+              ><span aria-hidden="true">02</span>Crew</a
+            >
+          </li>
+          <li>
+            <a href="technology.html" class="text-accent"
+              ><span aria-hidden="true">03</span>Technology</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main" class="grid-container grid-container--destination flow">
+      <h1 class="numbered-title">
+        <span aria-hidden="true">01</span> Pick your destination
+      </h1>
+      <picture id="titan-image" data-hidden="false">
+        <!-- sourcet allows for multiple sources to mention and find resource in -->
+        <source
+          srcset="assets/destination/image-titan.webp"
+          type="image/webp"
+        />
+        <img src="assets/destination/image-titan.png" alt="titan" />
+      </picture>
+      <picture id="moon-image" data-hidden="true">
+        <!-- sourcet allows for multiple sources to mention and find resource in -->
+        <source srcset="assets/destination/image-moon.webp" type="image/webp" />
+        <img src="assets/destination/image-moon.png" alt="moon" />
+      </picture>
+      <picture id="mars-image" data-hidden="true">
+        <!-- sourcet allows for multiple sources to mention and find resource in -->
+        <source srcset="assets/destination/image-mars.webp" type="image/webp" />
+        <img src="assets/destination/image-mars.png" alt="mars" />
+      </picture>
+      <picture id="europa-image" data-hidden="true">
+        <!-- sourcet allows for multiple sources to mention and find resource in -->
+        <source
+          srcset="assets/destination/image-europa.webp"
+          type="image/webp"
+        />
+        <img src="assets/destination/image-europa.png" alt="europa" />
+      </picture>
+      <!-- defining role attribute to give context to the element for screen readers to understand and giving aria-lable to label the tablist for screen readers to read -->
+      <div
+        class="tab-list underline-indicators flex"
+        role="tablist"
+        aria-label="destination list"
+      >
+        <!-- role and data attribute can be made on the fly as we want to use to control whatever we want and it is beneficial for accessibility reasons and data attributes help for DOM manipulation -->
+        <a
+          href="#"
+          role="tab"
+          aria-controls="moon-tab"
+          data-image="moon-image"
+          aria-selected="false"
+          class="ff-sans-cond text-accent letter-spacing-2 uppercase"
+          tabindex="-1"
+          >Moon</a
+        >
+        <!-- tabindex -1 prevents the element from being accessed using tab key  -->
+        <!-- tabindex helps in setting up sequential order for navigating the tabs using tab key -->
+        <a
+          href="#"
+          role="tab"
+          aria-controls="mars-tab"
+          data-image="mars-image"
+          aria-selected="false"
+          class="ff-sans-cond text-accent letter-spacing-2 uppercase"
+          tabindex="-1"
+          >Mars</a
+        >
+        <a
+          href="#"
+          role="tab"
+          aria-controls="europa-tab"
+          data-image="europa-image"
+          aria-selected="false"
+          class="ff-sans-cond text-accent letter-spacing-2 uppercase"
+          tabindex="-1"
+          >Europa</a
+        >
+        <a
+          href="#"
+          role="tab"
+          aria-controls="titan-tab"
+          data-image="titan-image"
+          aria-selected="true"
+          class="ff-sans-cond text-accent letter-spacing-2 uppercase"
+          tabindex="0"
+          >Titan</a
+        >
+      </div>
+
+      <!-- this is content that is isolated for every page and changes for every page the above content remains the same for all the page in destination link -->
+
+      <article
+        class="destination-info flow"
+        id="titan-tab"
+        role="tabpanel"
+        data-hidden="false"
+      >
+        <h2 class="fs-900 ff-serif uppercase">Titan</h2>
+        <p>
+          The only moon known to have a dense atmosphere other than Earth, Titan
+          is a home away from home (just a few hundred degrees colder!). As a
+          bonus, you get striking views of the Rings of Saturn.
+        </p>
+        <!-- the meta informantion with just values changing for different pages -->
+        <div class="destination-meta flex">
+          <!-- since we want to the distance and travel time grouped together and shown side by side for large screen and on top of each other on smalle screen group them using div and use flexbox to control them -->
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Avg. distance
+            </h3>
+            <p class="ff-serif uppercase">1.6 bil. km</p>
+          </div>
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Est. travel time
+            </h3>
+            <p class="ff-serif uppercase">7 years</p>
+          </div>
+        </div>
+      </article>
+      <article
+        class="destination-info flow"
+        id="moon-tab"
+        role="tabpanel"
+        data-hidden="true"
+      >
+        <h2 class="fs-900 ff-serif uppercase">Moon</h2>
+        <p>
+          See our planet as you’ve never seen it before. A perfect relaxing trip
+          away to help regain perspective and come back refreshed. While you’re
+          there, take in some history by visiting the Luna 2 and Apollo 11
+          landing sites. Avg. distance 384,400 km Est. travel time 3 days
+        </p>
+        <!-- the meta informantion with just values changing for different pages -->
+        <div class="destination-meta flex">
+          <!-- since we want to the distance and travel time grouped together and shown side by side for large screen and on top of each other on smalle screen group them using div and use flexbox to control them -->
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Avg. distance
+            </h3>
+            <p class="ff-serif uppercase">384,400 km</p>
+          </div>
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Est. travel time
+            </h3>
+            <p class="ff-serif uppercase">3 days</p>
+          </div>
+        </div>
+      </article>
+      <article
+        class="destination-info flow"
+        id="mars-tab"
+        role="tabpanel"
+        data-hidden="true"
+      >
+        <h2 class="fs-900 ff-serif uppercase">Mars</h2>
+        <p>
+          Don’t forget to pack your hiking boots. You’ll need them to tackle
+          Olympus Mons, the tallest planetary mountain in our solar system. It’s
+          two and a half times the size of Everest!
+        </p>
+        <!-- the meta informantion with just values changing for different pages -->
+        <div class="destination-meta flex">
+          <!-- since we want to the distance and travel time grouped together and shown side by side for large screen and on top of each other on smalle screen group them using div and use flexbox to control them -->
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Avg. distance
+            </h3>
+            <p class="ff-serif uppercase">225 mil. km</p>
+          </div>
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Est. travel time
+            </h3>
+            <p class="ff-serif uppercase">9 months</p>
+          </div>
+        </div>
+      </article>
+      <article
+        class="destination-info flow"
+        id="europa-tab"
+        role="tabpanel"
+        data-hidden="true"
+      >
+        <h2 class="fs-900 ff-serif uppercase">Europa</h2>
+        <p>
+          The smallest of the four Galilean moons orbiting Jupiter, Europa is a
+          winter lover’s dream. With an icy surface, it’s perfect for a bit of
+          ice skating, curling, hockey, or simple relaxation in your snug
+          wintery cabin.
+        </p>
+        <!-- the meta informantion with just values changing for different pages -->
+        <div class="destination-meta flex">
+          <!-- since we want to the distance and travel time grouped together and shown side by side for large screen and on top of each other on smalle screen group them using div and use flexbox to control them -->
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Avg. distance
+            </h3>
+            <p class="ff-serif uppercase">628 mil. km</p>
+          </div>
+          <div>
+            <h3
+              class="ff-sans-cond fs-200 uppercase letter-spacing-2 text-accent"
+            >
+              Est. travel time
+            </h3>
+            <p class="ff-serif uppercase">3 years</p>
+          </div>
+        </div>
+      </article>
+    </main>
+    <!-- 00 Home
+  01 Destination
+  02 Crew
+  03 Technology
+
+  01 Pick your destination
+
+  Moon
+  Mars
+  Europa
+  Titan
+
+  Titan
+
+  The only moon known to have a dense atmosphere other than Earth, Titan 
+  is a home away from home (just a few hundred degrees colder!). As a 
+  bonus, you get striking views of the Rings of Saturn.
+
+  Avg. distance
+  1.6 bil. km
+
+  Est. travel time
+  7 years -->
+  </body>
+</html>
