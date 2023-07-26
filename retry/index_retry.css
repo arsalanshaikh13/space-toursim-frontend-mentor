@@ -554,13 +554,9 @@ read out the element to provide context to the listeners about the element*/
   color: hsl(var(--clr-dark));
 }
 /* button */
-.home-content {
-  /* transform: translateX(-200%); */
-  animation: slidein 400ms ease;
-}
+
 .large-button {
-  /* transform: translateX(200%); */
-  animation: slidein 400ms ease;
+  /* animation: slidein 400ms ease; */
   /* remove default border from the button */
   border: 0;
   /* font size is consisitent across all the media queries */
@@ -1101,4 +1097,33 @@ so take out the .skip-to-content from the flow of the body/page using position a
     clip: rect(0, 0, 0, 0);
     white-space: nowrap; */
   }
+}
+
+/* animation of the components  for sliding and out of from the side edge and controlled by adding and removing the classes starting with name slide*/
+@keyframes slide-in {
+  /* 0% {
+    transform: translateX(-200%);
+    opacity: 1;
+  } */
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+/* animating components making them move from the edge of the screen */
+/* .home-content {
+  opacity: 0;
+  transform: translateX(-100%);
+} */
+
+.slide_in {
+  animation: slide-in 1000ms ease forwards;
+}
+.slide-right {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.slide-left {
+  opacity: 0;
+  transform: translateX(-100%);
 }

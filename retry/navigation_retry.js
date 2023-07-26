@@ -29,3 +29,83 @@ navToggle.addEventListener("click", () => {
 //     navLink.setAttribute("aria-pressed", true);
 //   }
 // });
+
+const button = document.querySelector(".large-button");
+const homeContent = document.querySelector(".home-content");
+const picture = document.querySelector("picture");
+const article = document.querySelector("article");
+const slideRight = document.querySelector(".slide-right");
+const slideLeft = document.querySelector(".slide-left");
+// what i want to do is to select the specific components of individual page
+// when that page loads the components for that specific page only fade in
+// and javascript code only selects and adds .slide-in class to those specific page components only
+// instead of always adding .slide-in class to every components for every page
+
+window.addEventListener("load", (e) => {
+  // button.style.animation = "slide-in 700ms ease forwards ";
+  // homeContent.style.animation = "slide-in 400ms ease forwards";
+  console.log(e, e.target, slideLeft, slideRight);
+  const LocationPath = e.target.location.pathname;
+  console.log(LocationPath);
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+  const regex = new RegExp("index_retry");
+  console.log(regex.test(LocationPath));
+
+  // testing location path using regular expressions
+  if (regex.test(LocationPath)) {
+    // button.classList.remove("slide-right");
+    // homeContent.classList.remove("slide-left");
+    // button.classList.add("slide_in");
+    // homeContent.classList.add("slide_in");
+    slideRemove(button, "slide-right");
+    slideRemove(homeContent, "slide-left");
+    slideAdd(button, "slide_in");
+    slideAdd(homeContent, "slide_in");
+    // slideLeft.classList.remove("slide-left");
+    // slideRight.classList.remove("slide-right");
+    // slideRight.classList.add("slide_in");
+
+    // slideLeft.classList.add("slide_in");
+  } else {
+    //right now the slide_in class after being added persist due to which we can't see further animation when user navigates to different pages on the site and comes back on home page
+    // trying to reset the slide-right nd slide left class on button and homecontent of the home page
+    // in order to keep the animation effect intact when home page is loaded again by again removing slideright/slideleft class and addign back slidein class
+    // button.classList.add("slide-right");
+    // homeContent.classList.remove("slide-left");
+    // slideAdd(button, "slide-right");
+    // slideAdd(homeContent, "slide-left");
+    // slideRemove(button, "slide_in");
+    // slideRemove(homeContent, "slide_in");
+
+    // adding animonation for destination and other pages as well
+    // picture.classList.remove("slide-left");
+    // article.classList.remove("slide-right");
+    // picture.classList.add("slide_in");
+
+    // article.classList.add("slide_in");
+    // slideLeft.classList.remove("slide-left");
+    // slideRight.classList.remove("slide-right");
+    // slideRight.classList.add("slide_in");
+
+    // slideLeft.classList.add("slide_in");
+    console.log("slide ing");
+  }
+
+  // if (
+  //   LocationPath.test(
+  //     "/CS50p_project/project_aFinal/website/kevintutorial/space-tourism-FM/retry/index_retry.html"
+  //   ) ===
+  // ) {
+  //   console.log("true");
+  // }
+});
+
+function slideAdd(component, classSelector) {
+  component.classList.add(classSelector);
+}
+function slideRemove(component, classSelector) {
+  component.classList.add(classSelector);
+}
+// window.onload = (e) => {
+//   console.log(e, "onload");
+// };
