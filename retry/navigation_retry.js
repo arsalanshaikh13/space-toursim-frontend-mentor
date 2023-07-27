@@ -106,6 +106,28 @@ function slideAdd(component, classSelector) {
 function slideRemove(component, classSelector) {
   component.classList.add(classSelector);
 }
+
+// // trying to fade out the image and remove from the layout of the page
+// // https://www.impressivewebs.com/animate-display-block-none/
+// // https://codepen.io/arsalan13/pen/vYQVpvL
+// const landscapeImg = document.querySelector(".landscape-image");
 // window.onload = (e) => {
 //   console.log(e, "onload");
+//   // first fade out the existing landscape image with opacity going to 0 as mentioned in the animation style inside .zero_opacity class
+
+//   landscapeImg.classList.add("zero_opacity");
+//   //as the animtion of opacity fading out is 400ms so just as the image fades out in 400ms
+//   // set the timeOut of 400ms that means after 400ms of window load javascript will add the class dNone which has display none style in it
+//   // so the landscape img which got first fade out from .zero-opacity class now is removed from the layout of the page by the dNone class which has display none class style in it
+//   // setTimeout(() => {
+//   //   landscapeImg.classList.add("dNone");
+//   // }, 400);
+
+//   // instead of putting timer as above we can watch for fade out animation to end to apply display none class
+//   landscapeImg.addEventListener("animationend", () => {
+//     // setTimeout(() => {
+//     //   landscapeImg.classList.add("dNone");
+//     // }, 1);
+//     landscapeImg.classList.add("dNone");
+//   });
 // };

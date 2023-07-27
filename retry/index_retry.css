@@ -555,7 +555,14 @@ read out the element to provide context to the listeners about the element*/
 }
 /* button */
 
+/* .home-content {
+  /* transform: translateX(-200%); */
+/* opacity:0; */
+/* animation: slidein 400ms ease; */
+/* } */
 .large-button {
+  /* transform: translateX(200%); */
+  /* opacity:0; */
   /* animation: slidein 400ms ease; */
   /* remove default border from the button */
   border: 0;
@@ -1016,8 +1023,12 @@ so take out the .skip-to-content from the flow of the body/page using position a
   }
   .grid-container--technology > .technology-info {
     animation: show 0.4s ease;
+    /* animation: hide 0.4s ease forwards; */
   }
   .grid-container--technology > picture > .portrait-image {
+    /* first make theimage visibile in the layout by making display layout so that browser can allocate and calculate the space for the image
+    then in animation scale/opacity from 0 to 1 in order to give the appearance of  the image fading/scaling into the screen from oblivion/obscurity */
+
     display: block;
     /* opacity: 0;
     transform: scale(0); */
@@ -1025,20 +1036,24 @@ so take out the .skip-to-content from the flow of the body/page using position a
   }
 
   .grid-container--technology > picture > .landscape-image {
-    /* display: none; */
     /* can't put display none in animation because animation creates its own composite layer and image goes to display none in that composite layer but
     ni the website the space alloted to the image remains intact  so the lanscape image despite being hidden still occupies space and even if i use translate to hide the image the space alloted for landscape image will still be their and will affect the layout and placements of other compoenents as well */
-    animation: hide 0.4s ease forwards;
+    /* animation: hide 0.4s ease forwards; */
+    /* animation-iteration-count: infinite; */
     /* we can use javascript settimeout/setinterval function to delay picture display to none here
     but still for a time a being landscape image will still occupy some real estate in the layout */
     display: none;
   }
+  /* .grid-container--technology > picture > .landscape-image:hover {
+    animation: hide 0.4s ease forwards;
+  } */
 }
 
 /* unfortunately for crew page the images are not overlapping like in destination page so we need to remove the image from the layout completely for crew page by keeping the same attribute but increasing specificity */
 .grid-container--crew [data-hidden="true"],
 .grid-container--technology [data-hidden="true"] {
   display: none;
+  /* animation: hide 400ms ease forwards; */
 }
 .grid-container--crew [data-hidden="false"],
 .grid-container--technology [data-hidden="false"] {
@@ -1086,16 +1101,17 @@ so take out the .skip-to-content from the flow of the body/page using position a
 @keyframes hide {
   from {
     opacity: 1;
-    transform: scale(1);
+    /* transform: scale(1); */
+    /* display: block; */
   }
   to {
     opacity: 0;
-    transform: scale(0);
+    /* transform: scale(0); */
     /* can't put display none here because  the component is in a separate composite layer right due to being in animation and transform and opacity so even if i make display none the image will disappear in the composite layer instead of actuall website layer */
-    /* display: none;
+    /* display: none; */
 
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap; */
+    /* clip: rect(0, 0, 0, 0);
+    white-space: nowrap;  */
   }
 }
 
@@ -1126,4 +1142,55 @@ so take out the .skip-to-content from the flow of the body/page using position a
 .slide-left {
   opacity: 0;
   transform: translateX(-100%);
+}
+
+.zero_opacity {
+  animation: hide 0.4s ease forwards;
+}
+.dNone {
+  display: none;
+}
+
+/* testing some animtion display none quirks in chrome and firefox 
+follow notes.md for more info */
+.box {
+  background: white;
+  border: 2px solid lime;
+  min-height: 100px;
+  padding: 10px;
+  display: grid;
+  /* display:flex; */
+}
+.pink_box {
+  display: inline-block;
+  background: hotpink;
+  width: 60px;
+  margin-right: 15px;
+  height: 60px;
+  /* isolation:isolate; */
+  z-index: 10;
+  /* display:none; */
+  /* transform:translateX(50%); */
+  /* will-change:transform; */
+  animation: hideq 400ms ease forwards;
+}
+.blue_box {
+  display: inline-block;
+  background: lightblue;
+  width: 60px;
+  height: 60px;
+  /* isolation:isolate; */
+  z-index: 20;
+  /* transform:translateX(20%); */
+  /*display:none;*/
+}
+@keyframes hideq {
+  to {
+    transform: scale(0);
+    /* opacity: 0; */
+    /* visibility: hidden; */
+    display: none;
+    /* height:0px; */
+    /* width:0px; */
+  }
 }
